@@ -2,7 +2,7 @@
   "name": "gen-step-ui",
   "version": "1.0.0",
   "description": "gen step ui",
-  "main": "index.js",
+  "main": "app/index.js",
   "scripts": {
     "start": "electron ."
   },
@@ -17,6 +17,18 @@
   },
   "homepage": "https://github.com/Acaruso/gen-step-ui#readme",
   "devDependencies": {
-    "electron": "^8.2.0"
-  }
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-transform-runtime": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/preset-react": "^7.9.4",
+    "babel-loader": "^8.1.0",
+    "babel-preset-env": "^1.7.0",
+    "electron": "^8.2.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {}
 }
