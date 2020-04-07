@@ -2,7 +2,7 @@ const path = require("path")
 const webpack = require("webpack")
 
 module.exports = {
-    entry: "./app/entry.js",
+    entry: path.resolve(__dirname, "app/entry.js"),
     module: {
         rules: [
             {
