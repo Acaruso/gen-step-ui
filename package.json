@@ -2,7 +2,7 @@
   "name": "gen-step-ui",
   "version": "1.0.0",
   "description": "gen step ui",
-  "main": "app/main.js",
+  "main": "dist/main-bundle.js",
   "scripts": {
     "build": "webpack",
     "build-dev": "webpack --mode development",
