@@ -21,5 +21,6 @@ module.exports = {
         publicPath: "/dist/",
         filename: "bundle.js"
     },
-    plugins: []
+    plugins: [],
+    target: "electron-renderer"
 };

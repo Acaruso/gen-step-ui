@@ -1,4 +1,5 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, dialog } = require('electron');
+const fs = require('fs');
 
 function createWindow () {
   // Create the browser window.
@@ -14,7 +15,9 @@ function createWindow () {
   win.loadFile(__dirname + '/index.html')
 
   // Open the DevTools.
-  win.webContents.openDevTools()
+  // win.webContents.openDevTools()
+
+  // getFile();
 }
 
 // This method will be called when Electron has finished
@@ -39,5 +42,14 @@ app.on('activate', () => {
   }
 })
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+const getFile = exports.getFile = () => {
+  dialog.showOpenDialog({
+    properties: ['openFile']
+  })
+  .then((res) => {
+    const file = res.filePaths[0];
+    const content = fs.readFileSync(file).toString();
+    console.log(content);
+  });
+
+};
