@@ -1,7 +1,7 @@
 import React from "react";
 import { remote, ipcRenderer } from "electron";
 
-const mainProcess = remote.require("./index.js");
+const mainProcess = remote.require("./main.js");
 
 export default function App() {
     ipcRenderer.on('file-opened', (event, file, content) => {
@@ -11,7 +11,8 @@ export default function App() {
     });
 
     const handleClick = () => {
-        mainProcess.getFile();
+        // mainProcess.getFile();
+        mainProcess.writeMidiFile();
     };
 
     return (
