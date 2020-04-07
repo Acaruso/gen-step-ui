@@ -4,7 +4,9 @@
   "description": "gen step ui",
   "main": "app/index.js",
   "scripts": {
-    "start": "electron ."
+    "build": "webpack",
+    "build-dev": "webpack --mode development",
+    "start": "webpack --mode development && electron ."
   },
   "repository": {
     "type": "git",
