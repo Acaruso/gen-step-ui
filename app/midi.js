@@ -5,7 +5,7 @@ import constants from "./constants";
 
 
 const writeSong = (fileName, song) => {
-  const smf = new JZZ.MIDI.SMF(0, constants.resolution);
+  const smf = new JZZ.MIDI.SMF(1, constants.resolution);
 
   let trackIdx = 0;
 
@@ -13,7 +13,6 @@ const writeSong = (fileName, song) => {
     smf.push(new JZZ.MIDI.SMF.MTrk());
 
     for (const note of track.notes) {
-      console.log('note: ' + note);
       addNote(note.note, note.tick, note.dur, note.vel, smf[trackIdx])
     }
 
