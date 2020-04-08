@@ -8,6 +8,15 @@ export default function App() {
   };
 
   return (
-    <div onClick={handleClick}>Open File</div>
+    <>
+      <div onClick={handleClick}>Open File</div>
+      {/* <div className="container" style={{display: "flex"}}> */}
+      <div className="container">
+        <span className="item"></span>
+        <span className="item"></span>
+        <span className="item"></span>
+        <span className="item"></span>
+      </div>
+    </>
   );
 }
