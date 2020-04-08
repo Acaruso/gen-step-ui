@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
+import { connect } from "react-redux";
 import Song from "./Song";
 
-export default function App() {
+function App({testVal}) {
+  console.log('!!!!!!!!!!!')
+  console.log(testVal)
+  
   return (
     <>
       <div>
@@ -12,3 +16,11 @@ export default function App() {
     </>
   );
 }
+
+function mapStateToProps(state) {
+  return {
+    testVal: state.testVal.testVal
+  }
+}
+
+export default connect(mapStateToProps)(App);
