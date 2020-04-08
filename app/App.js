@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import { connect } from "react-redux";
 import Song from "./Song";
+import { testAction } from './redux/actions';
 
-function App({testVal}) {
-  console.log('!!!!!!!!!!!')
+function App({testVal, _testAction}) {
+  console.log('testVal:')
   console.log(testVal)
   
+  function onButtonClick() {
+    _testAction(testVal + 1);
+  }
+
   return (
     <>
       <div>
-        <button>Load Song</button>
+        <button onClick={onButtonClick}>Load Song</button>
         <button>Save Song</button>
       </div>
       <Song />
@@ -23,4 +28,10 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(App);
+function mapDispatchToProps(dispatch) {
+  return {
+    _testAction: (testVal) => dispatch(testAction({testVal}))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
