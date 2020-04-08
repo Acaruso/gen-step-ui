@@ -5,8 +5,12 @@
 .item {
   height: 70px;
   width: 70px;
-  background-color: cadetblue;
+  background-color: white;
   border: 1px solid black;
+}
+
+.item.selected-item {
+  background-color: cadetblue !important;
 }
 
 .item + .item { 
