@@ -1,39 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import Track from "./Track";
-import { addTrack } from './redux/actions';
-import { connect } from "react-redux";
 
+export default function Song() {
+  const [tracks, setTracks] = useState([])
+  const [trackNameValue, setTrackNameValue] = useState("");
 
-function Song({tracks, _addTrack}) {
   const trackElts = tracks.map((track) => {
-    return <Track />
+    return <Track track={track}/>
   });
 
   function onAddTrack() {
-    _addTrack({asdf: "asdf"});
+    const newTrack = {
+      name: trackNameValue
+    };
+    const newTracks = [ ...tracks ];
+    newTracks.push(newTrack);
+    setTracks(newTracks);
+    setTrackNameValue("");
+  }
+
+  function onTrackNameChange(e) {
+    setTrackNameValue(e.target.value);
   }
 
   return (
     <>
       <div>
         <button onClick={onAddTrack}>Add Track</button>
+        <input type="text" value={trackNameValue} onChange={onTrackNameChange}/>
       </div>
       {trackElts}
     </>
   );
 }
-
-function mapStateToProps(state) {
-  return {
-    tracks: state.tracks
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    _addTrack: (track) => dispatch(addTrack({track}))
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Song);
-

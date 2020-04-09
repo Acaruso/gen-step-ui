@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Song from "./Song";
 
-function App() {
+export default function App() {
   return (
     <>
       <div>
@@ -12,5 +12,3 @@ function App() {
     </>
   );
 }
-
-export default App;

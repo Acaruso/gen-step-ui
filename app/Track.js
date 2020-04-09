@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default function Track({song}) {
+export default function Track({track}) {
   const defaultNumSteps = 4;
   const defaultSquareData = getEmptySquareData(defaultNumSteps);
 
@@ -19,6 +19,7 @@ export default function Track({song}) {
 
   return (
     <>
+      <div>{track.name}</div>
       <div className="container">
         {squares}
       </div>
