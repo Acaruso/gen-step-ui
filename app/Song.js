@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import Track from "./Track";
-import { addTrack } from './redux/actions';
+// import { addTrack } from './redux/actions';
+import { addTrack } from './redux/slices/trackSlice';
 import { connect } from "react-redux";
 
 
-function Song({tracks, _addTrack}) {
-  const trackElts = tracks.map((track) => {
-    return <Track />
-  });
+function Song({tracks, addTrack}) {
+  const trackElts = <Track />;
+  // const trackElts = tracks.map((track) => {
+  //   return <Track />
+  // });
+
+  console.log(tracks);
 
   function onAddTrack() {
-    _addTrack({asdf: "asdf"});
+    addTrack({name: "asdf"});
   }
 
   return (
@@ -29,11 +33,13 @@ function mapStateToProps(state) {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    _addTrack: (track) => dispatch(addTrack({track}))
-  }
-}
+// function mapDispatchToProps(dispatch) {
+//   return {
+//     _addTrack: (track) => dispatch(addTrack({track}))
+//   }
+// }
+
+const mapDispatchToProps = { addTrack };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Song);
 
