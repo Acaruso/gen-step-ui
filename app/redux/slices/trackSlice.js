@@ -15,10 +15,16 @@ const trackSlice = createSlice({
         let res = { payload: { ...data, id: nextTrackId++ } }
         return res
       }
+    },
+    deleteTrack(state, action) {
+      const id = action.payload.id;
+      if (state[id]) {
+        delete state[id];
+      }
     }
   }
 })
 
-export const { addTrack } = trackSlice.actions
+export const { addTrack, deleteTrack } = trackSlice.actions
 
 export default trackSlice.reducer
