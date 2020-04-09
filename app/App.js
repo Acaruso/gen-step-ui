@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { connect } from "react-redux";
 import Song from "./Song";
-import { testAction } from './redux/actions';
+import { addTrack } from './redux/actions';
 
-function App({testVal, _testAction}) {
-  console.log('testVal:')
-  console.log(testVal)
-  
+function App({
+  tracks, 
+  _addTrack
+}) {
   function onButtonClick() {
-    _testAction(testVal + 1);
+    _addTrack({asdf: "asdf"});
   }
 
   return (
@@ -24,13 +24,13 @@ function App({testVal, _testAction}) {
 
 function mapStateToProps(state) {
   return {
-    testVal: state.testVal.testVal
+    tracks: state.tracks
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    _testAction: (testVal) => dispatch(testAction({testVal}))
+    _addTrack: (track) => dispatch(addTrack({track}))
   }
 }
 
