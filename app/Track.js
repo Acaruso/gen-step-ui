@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 export default function Track({track}) {
-  const defaultNumSteps = 4;
+  const defaultNumSteps = 8;
   const defaultSquareData = getEmptySquareData(defaultNumSteps);
 
   const [numSteps, setNumSteps] = useState(defaultNumSteps);
@@ -23,6 +23,7 @@ export default function Track({track}) {
       <div className="container">
         {squares}
       </div>
+      <TrackEvents events={track.events}/>
     </>
   );
 }
@@ -34,6 +35,67 @@ function Square({selected, onSquareClick, index}) {
       onClick={() => onSquareClick(index)}
     />
   );
+}
+
+function TrackEvents({events}) {
+  const [noteValue, setNoteValue] = useState("");
+
+  function onChangeNote(e) {
+    const val = e.target.value.replace(/\D/,'')
+    setNoteValue(val);
+  }
+
+  const [velocityValue, setVelocityValue] = useState("");
+
+  function onChangeVelocity(e) {
+    const val = e.target.value.replace(/\D/,'')
+    setVelocityValue(val);
+  }
+
+  function onClickAddEvent() {
+    
+  }
+
+  return (
+    <>
+      <button onClick={onClickAddEvent}>Add Event</button>
+      <div>
+        <label>
+          Note:
+          <input type="text" value={noteValue} onChange={onChangeNote} />
+        </label>
+      </div>
+      <div>
+        <label>
+          Velocity:
+          <input type="text" value={velocityValue} onChange={onChangeVelocity} />
+        </label>
+      </div>
+    </>
+  );
+}
+
+function EventList({events}) {
+  const eventElts = events.map((event) => {
+    return (
+      <div>
+        <div>
+          Note: {event.note}
+        </div>
+        <div>
+          Vel: {event.vel}
+        </div>
+      </div>
+    )
+  });
+
+  if (events) {
+    return (
+      <div>
+        Events:
+      </div>
+    )
+  }
 }
 
 function getEmptySquareData(numSteps) {

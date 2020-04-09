@@ -11,7 +11,8 @@ export default function Song() {
 
   function onAddTrack() {
     const newTrack = {
-      name: trackNameValue
+      name: trackNameValue,
+      events: []
     };
     const newTracks = [ ...tracks ];
     newTracks.push(newTrack);
@@ -19,15 +20,19 @@ export default function Song() {
     setTrackNameValue("");
   }
 
-  function onTrackNameChange(e) {
+  function onChangeTrackName(e) {
     setTrackNameValue(e.target.value);
   }
 
   return (
     <>
       <div>
+        <button>Load Song</button>
+        <button>Save Song</button>
+      </div>
+      <div>
         <button onClick={onAddTrack}>Add Track</button>
-        <input type="text" value={trackNameValue} onChange={onTrackNameChange}/>
+        <input type="text" value={trackNameValue} onChange={onChangeTrackName}/>
       </div>
       {trackElts}
     </>
