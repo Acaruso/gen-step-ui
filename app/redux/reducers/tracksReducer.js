@@ -1,4 +1,6 @@
 const initialTracksState = {
+  items: {},
+  ids: []
 };
 
 function tracksReducer(state = initialTracksState, action) {
