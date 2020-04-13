@@ -6,8 +6,8 @@ let win = null;
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 900,
-    height: 900,
+    width: 1400,
+    height: 1000,
     webPreferences: {
       nodeIntegration: true
     }
@@ -18,7 +18,7 @@ function createWindow () {
   // win.loadFile('Users/ajc/development/java/gen-step-ui/app/index.html');
 
   // Open the DevTools.
-  win.webContents.openDevTools()
+  // win.webContents.openDevTools()
 
   // getFile();
 }

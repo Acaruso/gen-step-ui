@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 export default function Track({track}) {
-  const defaultNumSteps = 4;
+  const defaultNumSteps = 16;
   const defaultSquareData = getEmptySquareData(defaultNumSteps);
 
   const [numSteps, setNumSteps] = useState(defaultNumSteps);
@@ -20,7 +20,7 @@ export default function Track({track}) {
   return (
     <>
       <div>{track.name}</div>
-      <div className="container">
+      <div className="track">
         {squares}
       </div>
     </>
@@ -30,7 +30,7 @@ export default function Track({track}) {
 function Square({selected, onSquareClick, index}) {
   return (
     <span 
-      className={selected ? "item selected-item" : "item"}
+      className={selected ? "square selected-square" : "square"}
       onClick={() => onSquareClick(index)}
     />
   );
