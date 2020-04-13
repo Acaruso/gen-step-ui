@@ -11,7 +11,7 @@ const trackSlice = createSlice({
   reducers: {
     addTrack: {
       reducer(state, action) {
-        const newTrack = action.payload;
+        const newTrack = createTrack(action.payload.id);
         state.items[newTrack.id] = newTrack;
         state.ids.push(newTrack.id);
       },
@@ -45,6 +45,17 @@ const trackSlice = createSlice({
     }
   }
 })
+
+function createTrack(id) {
+  let track = {
+    id: id,
+    events: []
+  };
+  for (let i = 0; i < 16; i++) {
+    track.events.push({});
+  }
+  return track;
+}
 
 export const { addTrack, deleteTrackById, deleteTrackByName } = trackSlice.actions
 

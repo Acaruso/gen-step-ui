@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
+import { connect } from "react-redux";
+import { selectStep } from "./redux/slices/curSelectedStepSlice";
 
-export default function Track({track}) {
+function Track({track, curSelectedStep, selectStep}) {
+  console.log('!!!!!!!!!!!!')
+  console.log(curSelectedStep)
+
   const defaultNumSteps = 16;
   const defaultSquareData = getEmptySquareData(defaultNumSteps);
 
@@ -43,3 +48,13 @@ function getEmptySquareData(numSteps) {
   }
   return emptySquareData;
 }
+
+function mapStateToProps(state) {
+  return {
+    curSelectedStep: state.curSelectedStep
+  }
+}
+
+const mapDispatchToProps = { selectStep };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Track);
