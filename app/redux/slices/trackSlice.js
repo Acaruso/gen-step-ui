@@ -13,7 +13,7 @@ const trackSlice = createSlice({
       step: -1
     },
     eventEditorForm: {
-      type: '',
+      type: 'rest',
       note: '',
       vel: '',
       dur: ''
@@ -35,6 +35,8 @@ const trackSlice = createSlice({
       const payload = action.payload;
       const track = state.items[payload.id];
       if (track) {
+        track.events[payload.event].type = payload.type;
+        track.events[payload.event].active = payload.active;
         track.events[payload.event].note = payload.note;
         track.events[payload.event].vel = payload.vel;
         track.events[payload.event].dur = payload.dur;
@@ -61,6 +63,7 @@ const trackSlice = createSlice({
       }
 
       state.eventEditorForm.type = curEvent.type;
+      state.eventEditorForm.active = curEvent.active;
       state.eventEditorForm.note = curEvent.note;
       state.eventEditorForm.vel = curEvent.vel;
       state.eventEditorForm.dur = curEvent.dur;
@@ -97,7 +100,7 @@ function createTrack(payload, numSteps) {
     events: []
   };
   for (let i = 0; i < numSteps; i++) {
-    track.events.push({ type: 'rest' });
+    track.events.push({ type: 'rest', active: false });
   }
   return track;
 }
