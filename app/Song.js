@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Track from "./Track";
+import EventEditor from "./EventEditor";
 import { addTrack, deleteTrackByName } from './redux/slices/trackSlice';
 import { connect } from "react-redux";
 
@@ -46,9 +47,7 @@ function Song({tracks, addTrack, deleteTrackByName}) {
         </div>
         {trackElts}
       </div>
-      <div>
-        blah blah blah
-      </div>
+      <EventEditor />
     </div>
   );
 }
