@@ -21,6 +21,15 @@ const trackSlice = createSlice({
         return res
       }
     },
+    updateEvent(state, action) {
+      const payload = action.payload;
+      const track = state.items[payload.id];
+      if (track) {
+        track.events[payload.event].note = payload.note;
+        track.events[payload.event].vel = payload.vel;
+        track.events[payload.event].dur = payload.dur;
+      }
+    },
     deleteTrackById(state, action) {
       const id = action.payload.id;
       if (state.items[id]) {
@@ -54,11 +63,11 @@ function createTrack(payload, numSteps) {
     events: []
   };
   for (let i = 0; i < numSteps; i++) {
-    track.events.push({ note: i });
+    track.events.push({});
   }
   return track;
 }
 
-export const { addTrack, deleteTrackById, deleteTrackByName } = trackSlice.actions
+export const { addTrack, updateEvent, deleteTrackById, deleteTrackByName } = trackSlice.actions
 
 export default trackSlice.reducer
