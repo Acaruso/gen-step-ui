@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import { createSelector } from '@reduxjs/toolkit'
 import { connect } from 'react-redux'
 import { updateEvent } from './redux/slices/trackSlice';
+import { updateEventEditorForm } from './redux/slices/eventEditorFormSlice';
 
-function EventEditor({curEvent, curSelectedStep, updateEvent}) {
+function EventEditor({curEvent, curSelectedStep, updateEvent, eventEditorForm, updateEventEditorForm}) {
+  console.log('event editor form')
+  console.log(eventEditorForm)
+  
   function onChangeNote(e) {
     const newNote = e.target.value.replace(/\D/,'');
     _updateEvent({
@@ -50,7 +54,6 @@ function EventEditor({curEvent, curSelectedStep, updateEvent}) {
           value={curEvent.note}
           onChange={onChangeNote}
         />
-        <span>cur note: {curEvent.note}</span>
       </div>
       <div className="event-editor-row">
         <label htmlFor="note">vel</label>
@@ -61,7 +64,6 @@ function EventEditor({curEvent, curSelectedStep, updateEvent}) {
           value={curEvent.vel}
           onChange={onChangeVel}
         />
-        <span>cur vel: {curEvent.vel}</span>
       </div>
       <div className="event-editor-row">
         <label htmlFor="note">dur</label>
@@ -72,7 +74,6 @@ function EventEditor({curEvent, curSelectedStep, updateEvent}) {
           value={curEvent.dur}
           onChange={onChangeDur}
         />
-        <span>cur dur: {curEvent.dur}</span>
       </div>
     </div>
   );
@@ -98,10 +99,11 @@ const selectCurEvent = createSelector(
 function mapStateToProps(state) {
   return {
     curEvent: selectCurEvent(state),
-    curSelectedStep: state.curSelectedStep
+    curSelectedStep: state.curSelectedStep,
+    eventEditorForm: state.eventEditorForm
   };
 }
 
-const mapDispatchToProps = { updateEvent };
+const mapDispatchToProps = { updateEvent, updateEventEditorForm };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventEditor);

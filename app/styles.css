@@ -44,4 +44,6 @@ input {
 
 .event-editor-row {
   margin-bottom: 5px;
+  display: grid;
+  grid-template-columns: 10% 90%;
 }
