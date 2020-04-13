@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from "react-redux";
-import { selectStep } from "./redux/slices/curSelectedStepSlice";
+import { selectStep } from "./redux/slices/trackSlice";
 
 function Track({track, curSelectedStep, selectStep}) {
   const onSquareClick = (index) => {
@@ -33,7 +33,7 @@ function Square({selected, onSquareClick, index}) {
 
 function mapStateToProps(state) {
   return {
-    curSelectedStep: state.curSelectedStep
+    curSelectedStep: state.tracks.curSelectedStep
   }
 }
 

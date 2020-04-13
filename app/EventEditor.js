@@ -5,9 +5,6 @@ import { updateEvent } from './redux/slices/trackSlice';
 import { updateEventEditorForm } from './redux/slices/eventEditorFormSlice';
 
 function EventEditor({curEvent, curSelectedStep, updateEvent, eventEditorForm, updateEventEditorForm}) {
-  console.log('event editor form')
-  console.log(eventEditorForm)
-  
   function onChangeNote(e) {
     const newNote = e.target.value.replace(/\D/,'');
     _updateEvent({
@@ -45,6 +42,19 @@ function EventEditor({curEvent, curSelectedStep, updateEvent, eventEditorForm, u
   return (
     <div>
       <h3>Event Editor</h3>
+      <EventEditorForm 
+        curEvent={eventEditorForm} 
+        onChangeNote={onChangeNote} 
+        onChangeVel={onChangeVel} 
+        onChangeDur={onChangeDur}
+      />
+    </div>
+  );
+}
+
+function EventEditorForm({curEvent, onChangeNote, onChangeVel, onChangeDur}) {
+  return (
+    <>
       <div className="event-editor-row">
         <label htmlFor="note">note</label>
         <input 
@@ -75,12 +85,12 @@ function EventEditor({curEvent, curSelectedStep, updateEvent, eventEditorForm, u
           onChange={onChangeDur}
         />
       </div>
-    </div>
+    </>
   );
 }
 
 const selectTracks = state => state.tracks.items;
-const selectCurSelectedStep = state => state.curSelectedStep;
+const selectCurSelectedStep = state => state.tracks.curSelectedStep;
 
 const selectCurEvent = createSelector(
   [selectTracks, selectCurSelectedStep],
@@ -99,8 +109,8 @@ const selectCurEvent = createSelector(
 function mapStateToProps(state) {
   return {
     curEvent: selectCurEvent(state),
-    curSelectedStep: state.curSelectedStep,
-    eventEditorForm: state.eventEditorForm
+    curSelectedStep: state.tracks.curSelectedStep,
+    eventEditorForm: state.tracks.eventEditorForm
   };
 }
 

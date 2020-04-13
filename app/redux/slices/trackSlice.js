@@ -8,6 +8,16 @@ const trackSlice = createSlice({
     items: {},
     ids: [],
     numSteps: 16,
+    curSelectedStep: {
+      trackId: -1,
+      step: -1
+    },
+    eventEditorForm: {
+      type: '',
+      note: '',
+      vel: '',
+      dur: ''
+    }
   },
   reducers: {
     addTrack: {
@@ -30,6 +40,31 @@ const trackSlice = createSlice({
         track.events[payload.event].dur = payload.dur;
       }
     },
+    selectStep(state, action) {
+      // update curSelectedStep
+      state.curSelectedStep.trackId = action.payload.trackId;
+      state.curSelectedStep.step = action.payload.step;
+      
+      // update eventEditorForm
+      const curSelectedStep = action.payload;
+      const tracks = state.items;
+      let curEvent = { note: '', vel: '', dur: '' };
+
+      const track = tracks[curSelectedStep.trackId];
+      if (track) {
+        const event = track.events[curSelectedStep.step];
+        if (event.type === 'rest') {
+          curEvent.type = 'rest';
+        } else {
+          curEvent = event;
+        }
+      }
+
+      state.eventEditorForm.type = curEvent.type;
+      state.eventEditorForm.note = curEvent.note;
+      state.eventEditorForm.vel = curEvent.vel;
+      state.eventEditorForm.dur = curEvent.dur;
+    },
     deleteTrackById(state, action) {
       const id = action.payload.id;
       if (state.items[id]) {
@@ -47,7 +82,6 @@ const trackSlice = createSlice({
           break;
         }
       }
-      
       if (state.items[toDeleteId]) {
         delete state.items[toDeleteId];
         state.ids = state.ids.filter((elt) => elt !== toDeleteId);
@@ -63,11 +97,11 @@ function createTrack(payload, numSteps) {
     events: []
   };
   for (let i = 0; i < numSteps; i++) {
-    track.events.push({ note: '', vel: '', dur: '' });
+    track.events.push({ type: 'rest' });
   }
   return track;
 }
 
-export const { addTrack, updateEvent, deleteTrackById, deleteTrackByName } = trackSlice.actions
+export const { addTrack, updateEvent, selectStep, deleteTrackById, deleteTrackByName } = trackSlice.actions
 
 export default trackSlice.reducer

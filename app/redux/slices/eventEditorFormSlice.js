@@ -18,20 +18,23 @@ const eventEditorFormSlice = createSlice({
   extraReducers: {
     [selectStep]: (state, action) => {
       // when user selects new step, update event editor form
-      const curSelectedStep = action.payload;
-      let curEvent = { note: '', vel: '', dur: '' };
 
-      const track = tracks[curSelectedStep.trackId];
-      if (track) {
-        const event = track.events[curSelectedStep.step];
-        if (event) {
-          curEvent = event;
-        }
-      }
+      // const curSelectedStep = action.payload;
+      // let curEvent = { note: '', vel: '', dur: '' };
 
-      state.note = curEvent.note;
-      state.vel = curEvent.vel;
-      state.dur = curEvent.dur;
+      // const track = tracks[curSelectedStep.trackId];
+      // if (track) {
+      //   const event = track.events[curSelectedStep.step];
+      //   if (event) {
+      //     curEvent = event;
+      //   }
+      // }
+
+      // state.note = curEvent.note;
+      // state.vel = curEvent.vel;
+      // state.dur = curEvent.dur;
+
+      return state;
     }
   }
 })
