@@ -63,7 +63,7 @@ function createTrack(payload, numSteps) {
     events: []
   };
   for (let i = 0; i < numSteps; i++) {
-    track.events.push({});
+    track.events.push({ note: '', vel: '', dur: '' });
   }
   return track;
 }

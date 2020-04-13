@@ -4,17 +4,37 @@ import { connect } from 'react-redux'
 import { updateEvent } from './redux/slices/trackSlice';
 
 function EventEditor({curEvent, curSelectedStep, updateEvent}) {
-  const [note, setNote] = useState('');
-  const [vel, setVel] = useState('');
-  const [dur, setDur] = useState('');
+  function onChangeNote(e) {
+    const newNote = e.target.value.replace(/\D/,'');
+    _updateEvent({
+      ...curEvent,
+      note: newNote,
+    });
+  }
 
-  function onClickAddEvent() {
+  function onChangeVel(e) {
+    const newVel = e.target.value.replace(/\D/,'');
+    _updateEvent({
+      ...curEvent,
+      vel: newVel,
+    });
+  }
+
+  function onChangeDur(e) {
+    const newDur = e.target.value.replace(/\D/,'');
+    _updateEvent({
+      ...curEvent,
+      dur: newDur,
+    });
+  }
+
+  function _updateEvent(event) {
     updateEvent({
       id: curSelectedStep.trackId,
       event: curSelectedStep.step,
-      note: note,
-      vel: vel, 
-      dur: dur
+      note: event.note,
+      vel: event.vel, 
+      dur: event.dur
     });
   }
 
@@ -27,8 +47,8 @@ function EventEditor({curEvent, curSelectedStep, updateEvent}) {
           type="text" 
           id="note" 
           className="event-editor-input"
-          value={note}
-          onChange={e => setNote(e.target.value)}
+          value={curEvent.note}
+          onChange={onChangeNote}
         />
         <span>cur note: {curEvent.note}</span>
       </div>
@@ -38,8 +58,8 @@ function EventEditor({curEvent, curSelectedStep, updateEvent}) {
           type="text" 
           id="vel" 
           className="event-editor-input"
-          value={vel}
-          onChange={e => setVel(e.target.value)}
+          value={curEvent.vel}
+          onChange={onChangeVel}
         />
         <span>cur vel: {curEvent.vel}</span>
       </div>
@@ -49,14 +69,10 @@ function EventEditor({curEvent, curSelectedStep, updateEvent}) {
           type="text" 
           id="dur" 
           className="event-editor-input"
-          value={dur}
-          onChange={e => setDur(e.target.value)}
+          value={curEvent.dur}
+          onChange={onChangeDur}
         />
         <span>cur dur: {curEvent.dur}</span>
-      </div>
-      <div className="event-editor-row">
-        <button onClick={onClickAddEvent}>Add Event</button>
-        <button>Delete Event</button>
       </div>
     </div>
   );
@@ -75,7 +91,7 @@ const selectCurEvent = createSelector(
         return event;
       }
     }
-    return {};
+    return { note: '', vel: '', dur: '' };
   }
 );
 
