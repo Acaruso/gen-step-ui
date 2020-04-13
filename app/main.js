@@ -6,21 +6,19 @@ let win = null;
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1400,
+    height: 1000,
     webPreferences: {
       nodeIntegration: true
     }
   });
 
-  console.log('@@@@@@@@@@@@@')
-  console.log(__dirname)
   // and load the index.html of the app.
   win.loadFile(__dirname + '/../app/index.html');
   // win.loadFile('Users/ajc/development/java/gen-step-ui/app/index.html');
 
   // Open the DevTools.
-  win.webContents.openDevTools()
+  // win.webContents.openDevTools()
 
   // getFile();
 }

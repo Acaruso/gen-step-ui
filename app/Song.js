@@ -1,22 +1,43 @@
 import React, { useState } from 'react';
 import Track from "./Track";
-import { addTrack } from './redux/actions';
+import { addTrack, deleteTrackByName } from './redux/slices/trackSlice';
 import { connect } from "react-redux";
 
 
-function Song({tracks, _addTrack}) {
-  const trackElts = tracks.map((track) => {
-    return <Track />
+function Song({tracks, addTrack, deleteTrackByName}) {
+  const [trackNameValue, setTrackNameValue] = useState('');
+  const [deleteTrackNameValue, setDeleteTrackNameValue] = useState('');
+
+  const trackElts = tracks.ids.map((id) => {
+    const track = tracks.items[id];
+    return <Track track={track} />;
   });
 
   function onAddTrack() {
-    _addTrack({asdf: "asdf"});
+    addTrack({name: trackNameValue});
+    setTrackNameValue('');
+  }
+
+  function onDeleteTrack() {
+    deleteTrackByName({name: deleteTrackNameValue});
+    setDeleteTrackNameValue('');
+  }
+
+  function onChangeDeleteTrackName(e) {
+    setDeleteTrackNameValue(e.target.value);
+  }
+
+  function onChangeTrackName(e) {
+    setTrackNameValue(e.target.value);
   }
 
   return (
     <>
       <div>
         <button onClick={onAddTrack}>Add Track</button>
+        <input type="text" value={trackNameValue} onChange={onChangeTrackName} />
+        <button onClick={onDeleteTrack}>Delete Track</button>
+        <input type="text" value={deleteTrackNameValue} onChange={onChangeDeleteTrackName} />
       </div>
       {trackElts}
     </>
@@ -29,11 +50,7 @@ function mapStateToProps(state) {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    _addTrack: (track) => dispatch(addTrack({track}))
-  }
-}
+const mapDispatchToProps = { addTrack, deleteTrackByName };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Song);
 

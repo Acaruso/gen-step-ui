@@ -1,23 +1,29 @@
-.container {
+.track {
   display: flex;
 }
 
-.item {
-  height: 70px;
-  width: 70px;
+.square {
+  height: 50px;
+  width: 50px;
   background-color: white;
   border: 1px solid black;
+  margin-bottom: 5px;
 }
 
-.item.selected-item {
+.square.selected-square {
   background-color: cadetblue !important;
 }
 
-.item + .item { 
+.square + .square { 
   margin-left: 5px; 
 }
 
 button {
   margin-bottom: 5px;
+  margin-right: 5px;
+  
+}
+
+input {
   margin-right: 5px;
 }
