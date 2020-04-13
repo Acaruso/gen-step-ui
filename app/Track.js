@@ -3,23 +3,13 @@ import { connect } from "react-redux";
 import { selectStep } from "./redux/slices/curSelectedStepSlice";
 
 function Track({track, curSelectedStep, selectStep}) {
-  console.log('!!!!!!!!!!!!')
-  console.log(curSelectedStep)
-
-  const defaultNumSteps = 16;
-  const defaultSquareData = getEmptySquareData(defaultNumSteps);
-
-  const [numSteps, setNumSteps] = useState(defaultNumSteps);
-  const [squareData, setSquareData] = useState(defaultSquareData);
-
   const onSquareClick = (index) => {
-    let newSquareData = getEmptySquareData(numSteps);
-    newSquareData[index] = true;
-    setSquareData(newSquareData);
+    selectStep({trackId: track.id, step: index});
   };
 
-  const squares = squareData.map((elt, i) => {
-    return <Square selected={elt} onSquareClick={onSquareClick} index={i} />;
+  const squares = track.events.map((event, i) => {
+    const selected = curSelectedStep.trackId === track.id && curSelectedStep.step === i;
+    return <Square selected={selected} onSquareClick={onSquareClick} index={i} key={i}/>;
   });
 
   return (
@@ -39,14 +29,6 @@ function Square({selected, onSquareClick, index}) {
       onClick={() => onSquareClick(index)}
     />
   );
-}
-
-function getEmptySquareData(numSteps) {
-  let emptySquareData = [];
-  for (let i = 0; i < numSteps; i++) {
-    emptySquareData.push(false);
-  }
-  return emptySquareData;
 }
 
 function mapStateToProps(state) {

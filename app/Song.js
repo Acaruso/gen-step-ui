@@ -11,7 +11,7 @@ function Song({tracks, addTrack, deleteTrackByName}) {
 
   const trackElts = tracks.ids.map((id) => {
     const track = tracks.items[id];
-    return <Track track={track} />;
+    return <Track track={track} key={id} />;
   });
 
   function onAddTrack() {

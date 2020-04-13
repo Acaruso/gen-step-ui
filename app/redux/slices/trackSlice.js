@@ -6,12 +6,13 @@ const trackSlice = createSlice({
   name: 'tracks',
   initialState: {
     items: {},
-    ids: []
+    ids: [],
+    numSteps: 16,
   },
   reducers: {
     addTrack: {
       reducer(state, action) {
-        const newTrack = createTrack(action.payload.id);
+        const newTrack = createTrack(action.payload, state.numSteps);
         state.items[newTrack.id] = newTrack;
         state.ids.push(newTrack.id);
       },
@@ -46,12 +47,13 @@ const trackSlice = createSlice({
   }
 })
 
-function createTrack(id) {
+function createTrack(payload, numSteps) {
   let track = {
-    id: id,
+    id: payload.id,
+    name: payload.name,
     events: []
   };
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < numSteps; i++) {
     track.events.push({});
   }
   return track;

@@ -8,8 +8,8 @@ const curSelectedStepSlice = createSlice({
   },
   reducers: {
     selectStep(state, action) {
-      state.curSelectedStep.trackId = action.payload.trackId;
-      state.curSelectedStep.step = action.payload.step;
+      state.trackId = action.payload.trackId;
+      state.step = action.payload.step;
     }
   }
 })
