@@ -32,15 +32,24 @@ function Song({tracks, addTrack, deleteTrackByName}) {
   }
 
   return (
-    <>
+    <div className="grid">
       <div>
-        <button onClick={onAddTrack}>Add Track</button>
-        <input type="text" value={trackNameValue} onChange={onChangeTrackName} />
-        <button onClick={onDeleteTrack}>Delete Track</button>
-        <input type="text" value={deleteTrackNameValue} onChange={onChangeDeleteTrackName} />
+        <div>
+          <button>Load Song</button>
+          <button>Save Song</button>
+        </div>
+        <div>
+          <button onClick={onAddTrack}>Add Track</button>
+          <input type="text" value={trackNameValue} onChange={onChangeTrackName} />
+          <button onClick={onDeleteTrack}>Delete Track</button>
+          <input type="text" value={deleteTrackNameValue} onChange={onChangeDeleteTrackName} />
+        </div>
+        {trackElts}
       </div>
-      {trackElts}
-    </>
+      <div>
+        blah blah blah
+      </div>
+    </div>
   );
 }
 
