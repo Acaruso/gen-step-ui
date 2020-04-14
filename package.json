@@ -38,6 +38,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.3.4",
     "jzz-midi-smf": "^1.3.3",
-    "midi-writer-js": "^1.7.2"
+    "midi-writer-js": "^1.7.2",
+    "tone": "^13.8.25"
   }
 }
