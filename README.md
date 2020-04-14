@@ -1,2 +1,9 @@
-# gen-step-ui
-gen step ui
+Generative step sequencer with UI
+
+To install:
+
+npm install
+
+To run:
+
+npm run start
