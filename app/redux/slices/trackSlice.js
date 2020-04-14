@@ -12,12 +12,6 @@ const trackSlice = createSlice({
       trackId: -1,
       step: -1
     },
-    eventEditorForm: {
-      type: 'rest',
-      note: '',
-      vel: '',
-      dur: ''
-    }
   },
   reducers: {
     addTrack: {
@@ -43,30 +37,8 @@ const trackSlice = createSlice({
       }
     },
     selectStep(state, action) {
-      // update curSelectedStep
       state.curSelectedStep.trackId = action.payload.trackId;
       state.curSelectedStep.step = action.payload.step;
-      
-      // update eventEditorForm
-      const curSelectedStep = action.payload;
-      const tracks = state.items;
-      let curEvent = { note: '', vel: '', dur: '' };
-
-      const track = tracks[curSelectedStep.trackId];
-      if (track) {
-        const event = track.events[curSelectedStep.step];
-        if (event.type === 'rest') {
-          curEvent.type = 'rest';
-        } else {
-          curEvent = event;
-        }
-      }
-
-      state.eventEditorForm.type = curEvent.type;
-      state.eventEditorForm.active = curEvent.active;
-      state.eventEditorForm.note = curEvent.note;
-      state.eventEditorForm.vel = curEvent.vel;
-      state.eventEditorForm.dur = curEvent.dur;
     },
     deleteTrackById(state, action) {
       const id = action.payload.id;

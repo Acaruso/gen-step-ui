@@ -2,22 +2,22 @@ import React, { useState } from 'react';
 import { createSelector } from '@reduxjs/toolkit'
 import { connect } from 'react-redux'
 import { updateEvent } from './redux/slices/trackSlice';
-import { updateEventEditorForm } from './redux/slices/eventEditorFormSlice';
 
-function EventEditor({curEvent, curSelectedStep, updateEvent, eventEditorForm, updateEventEditorForm}) {
-  console.log(curEvent)
-
+function EventEditor({curEvent, curSelectedStep, updateEvent}) {
   function onClickCreateEvent(e) {
-    let x = {
-      ...curEvent,
-      active: true,
-    }
-    console.log('x')
-    console.log(x)
     _updateEvent({
-      ...curEvent,
       type: 'note',
       active: true,
+      note: '',
+      vel: '',
+      dur: '',
+    });
+  }
+
+  function onClickDeleteEvent(e) {
+    _updateEvent({
+      type: 'rest',
+      active: false,
     });
   }
 
@@ -60,8 +60,9 @@ function EventEditor({curEvent, curSelectedStep, updateEvent, eventEditorForm, u
     <div>
       <h3>Event Editor</h3>
       <EventEditorForm 
-        curEvent={eventEditorForm} 
+        curEvent={curEvent} 
         onClickCreateEvent={onClickCreateEvent}
+        onClickDeleteEvent={onClickDeleteEvent}
         onChangeNote={onChangeNote} 
         onChangeVel={onChangeVel} 
         onChangeDur={onChangeDur}
@@ -70,7 +71,7 @@ function EventEditor({curEvent, curSelectedStep, updateEvent, eventEditorForm, u
   );
 }
 
-function EventEditorForm({curEvent, onClickCreateEvent, onChangeNote, onChangeVel, onChangeDur}) {
+function EventEditorForm({curEvent, onClickCreateEvent, onClickDeleteEvent, onChangeNote, onChangeVel, onChangeDur}) {
   if (!curEvent.active) {
     return (
       <button onClick={onClickCreateEvent}>Create Event</button>
@@ -108,6 +109,7 @@ function EventEditorForm({curEvent, onClickCreateEvent, onChangeNote, onChangeVe
             onChange={onChangeDur}
           />
         </div>
+        <button onClick={onClickDeleteEvent}>Delete Event</button>
       </>
     );
   }
@@ -133,11 +135,10 @@ const selectCurEvent = createSelector(
 function mapStateToProps(state) {
   return {
     curEvent: selectCurEvent(state),
-    curSelectedStep: state.tracks.curSelectedStep,
-    eventEditorForm: state.tracks.eventEditorForm
+    curSelectedStep: state.tracks.curSelectedStep
   };
 }
 
-const mapDispatchToProps = { updateEvent, updateEventEditorForm };
+const mapDispatchToProps = { updateEvent };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventEditor);
