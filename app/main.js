@@ -18,7 +18,7 @@ function createWindow () {
   // win.loadFile('Users/ajc/development/java/gen-step-ui/app/index.html');
 
   // Open the DevTools.
-  // win.webContents.openDevTools()
+  win.webContents.openDevTools()
 
   // getFile();
 }

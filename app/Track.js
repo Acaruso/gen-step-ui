@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
+import { connect } from "react-redux";
+import { selectStep } from "./redux/slices/trackSlice";
 
-export default function Track({track}) {
-  const defaultNumSteps = 16;
-  const defaultSquareData = getEmptySquareData(defaultNumSteps);
-
-  const [numSteps, setNumSteps] = useState(defaultNumSteps);
-  const [squareData, setSquareData] = useState(defaultSquareData);
-
+function Track({track, curSelectedStep, selectStep}) {
   const onSquareClick = (index) => {
-    let newSquareData = getEmptySquareData(numSteps);
-    newSquareData[index] = true;
-    setSquareData(newSquareData);
+    selectStep({trackId: track.id, step: index});
   };
 
-  const squares = squareData.map((elt, i) => {
-    return <Square selected={elt} onSquareClick={onSquareClick} index={i} />;
+  const squares = track.events.map((event, i) => {
+    const selected = curSelectedStep.trackId === track.id && curSelectedStep.step === i;
+    const hasEvent = event.active;
+    return (
+      <Square selected={selected} hasEvent={hasEvent} onSquareClick={onSquareClick} index={i} key={i}/>
+    );
   });
 
   return (
@@ -27,19 +25,31 @@ export default function Track({track}) {
   );
 }
 
-function Square({selected, onSquareClick, index}) {
+function Square({selected, hasEvent, onSquareClick, index}) {
+  let classNames = ['square'];
+  if (selected) {
+    classNames.push('selected-square');
+  } else if (hasEvent) {
+    classNames.push('has-event');
+  }
+  const className = classNames.join(' ');
+
   return (
     <span 
-      className={selected ? "square selected-square" : "square"}
+      className={className}
       onClick={() => onSquareClick(index)}
-    />
+    >
+      { index % 4 === 0 ? 'X' : ''}
+    </span>
   );
 }
 
-function getEmptySquareData(numSteps) {
-  let emptySquareData = [];
-  for (let i = 0; i < numSteps; i++) {
-    emptySquareData.push(false);
+function mapStateToProps(state) {
+  return {
+    curSelectedStep: state.tracks.curSelectedStep
   }
-  return emptySquareData;
 }
+
+const mapDispatchToProps = { selectStep };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Track);
