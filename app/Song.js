@@ -1,24 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import Track from "./Track";
-import EventEditor from "./EventEditor";
-import { addTrack, deleteTrackByName } from './redux/slices/trackSlice';
-import { connect } from "react-redux";
-import * as Tone from "tone";
+import React, { useState, useEffect, useRef } from 'react';
+import Track from './Track';
+import EventEditor from './EventEditor';
+import Transport from './Transport';
+import { addTrack, deleteTrackByName, incrementTransport } from './redux/slices/trackSlice';
+import { connect } from 'react-redux';
+import * as Tone from 'tone';
 
 
-function Song({tracks, addTrack, deleteTrackByName}) {
+function Song({tracks, addTrack, deleteTrackByName, incrementTransport}) {
   const [trackNameValue, setTrackNameValue] = useState('');
   const [deleteTrackNameValue, setDeleteTrackNameValue] = useState('');
   const [loop, setLoop] = useState({});
+
+  // not sure why this is necessary, but Tone.Event callback can't read updated values from redux
+  const transport = useRef(0);
+  transport.current = tracks.transport;
 
   useEffect(() => {
     Tone.Transport.bpm.value = 120;
     Tone.Transport.start();
 
-    const _loop = new Tone.Loop(time => {
-      console.log('loop')
-      console.log(time)
-    }, "16n");
+    const _loop = new Tone.Event((time, transport) => {
+      incrementTransport();
+    }, transport);
+
+    _loop.loop = true;
+    _loop.loopEnd = '16n';
+
     setLoop(_loop);
   }, []);
 
@@ -55,7 +63,7 @@ function Song({tracks, addTrack, deleteTrackByName}) {
 
   return (
     <>
-      <div className="grid">
+      <div className='grid'>
         <div>
           <div>
             <button>Load Song</button>
@@ -63,10 +71,11 @@ function Song({tracks, addTrack, deleteTrackByName}) {
           </div>
           <div>
             <button onClick={onAddTrack}>Add Track</button>
-            <input type="text" value={trackNameValue} onChange={onChangeTrackName} />
+            <input type='text' value={trackNameValue} onChange={onChangeTrackName} />
             <button onClick={onDeleteTrack}>Delete Track</button>
-            <input type="text" value={deleteTrackNameValue} onChange={onChangeDeleteTrackName} />
+            <input type='text' value={deleteTrackNameValue} onChange={onChangeDeleteTrackName} />
           </div>
+          <Transport />
           {trackElts}
         </div>
         <EventEditor />
@@ -83,7 +92,7 @@ function mapStateToProps(state) {
   }
 }
 
-const mapDispatchToProps = { addTrack, deleteTrackByName };
+const mapDispatchToProps = { addTrack, deleteTrackByName, incrementTransport };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Song);
 

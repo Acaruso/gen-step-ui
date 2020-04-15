@@ -7,6 +7,22 @@
   grid-template-columns: 70% 30%;
 }
 
+.transport {
+  display: flex;
+}
+
+.transport-square {
+  height: 15px;
+  width: 50px;
+  background-color: white;
+  border: 1px solid black;
+  margin-bottom: 5px;
+}
+
+.transport-square + .transport-square { 
+  margin-left: 5px; 
+}
+
 .track {
   display: flex;
 }
@@ -19,16 +35,16 @@
   margin-bottom: 5px;
 }
 
+.square + .square { 
+  margin-left: 5px; 
+}
+
 .square.has-event {
   background-color: lightcoral;
 }
 
 .square.selected-square {
   background-color: cadetblue;
-}
-
-.square + .square { 
-  margin-left: 5px; 
 }
 
 button {

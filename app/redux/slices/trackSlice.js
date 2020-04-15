@@ -12,6 +12,7 @@ const trackSlice = createSlice({
       trackId: -1,
       step: -1
     },
+    transport: -1,
   },
   reducers: {
     addTrack: {
@@ -61,6 +62,9 @@ const trackSlice = createSlice({
         delete state.items[toDeleteId];
         state.ids = state.ids.filter((elt) => elt !== toDeleteId);
       }
+    },
+    incrementTransport(state, action) {
+      state.transport = (state.transport + 1) % 16;
     }
   }
 })
@@ -77,6 +81,6 @@ function createTrack(payload, numSteps) {
   return track;
 }
 
-export const { addTrack, updateEvent, selectStep, deleteTrackById, deleteTrackByName } = trackSlice.actions
+export const { addTrack, updateEvent, selectStep, deleteTrackById, deleteTrackByName, incrementTransport } = trackSlice.actions
 
 export default trackSlice.reducer
