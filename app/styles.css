@@ -19,6 +19,10 @@
   margin-bottom: 5px;
 }
 
+.transport-square.selected {
+  background-color: rgb(95, 110, 160);
+}
+
 .transport-square + .transport-square { 
   margin-left: 5px; 
 }

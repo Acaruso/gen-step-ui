@@ -12,17 +12,21 @@ function Song({tracks, addTrack, deleteTrackByName, incrementTransport}) {
   const [deleteTrackNameValue, setDeleteTrackNameValue] = useState('');
   const [loop, setLoop] = useState({});
 
-  // not sure why this is necessary, but Tone.Event callback can't read updated values from redux
+  // not sure why this is necessary, but Tone.Event callback doesn't read updated values from redux
+  // but it can read them from a ref
   const transport = useRef(0);
   transport.current = tracks.transport;
+  const refTracks = useRef({});
+  refTracks.current = tracks.items;
 
   useEffect(() => {
     Tone.Transport.bpm.value = 120;
     Tone.Transport.start();
 
-    const _loop = new Tone.Event((time, transport) => {
-      incrementTransport();
-    }, transport);
+    const _loop = new Tone.Event(
+      tick, 
+      { tracks: refTracks, transport: transport, incrementTransport: incrementTransport } 
+    );
 
     _loop.loop = true;
     _loop.loopEnd = '16n';
@@ -75,7 +79,7 @@ function Song({tracks, addTrack, deleteTrackByName, incrementTransport}) {
             <button onClick={onDeleteTrack}>Delete Track</button>
             <input type='text' value={deleteTrackNameValue} onChange={onChangeDeleteTrackName} />
           </div>
-          <Transport />
+          <Transport transport={tracks.transport}/>
           {trackElts}
         </div>
         <EventEditor />
@@ -84,6 +88,19 @@ function Song({tracks, addTrack, deleteTrackByName, incrementTransport}) {
       <button onClick={onClickStop}>Stop</button>
     </>
   );
+}
+
+function tick(time, args) {
+  const tracks = args.tracks.current;
+  const transport = args.transport.current;
+
+  const curEvent = tracks[0].events[transport];
+
+  if (curEvent && curEvent.type !== 'rest') {
+    console.log('!!!!!!!!!!!!!!')
+  }
+
+  args.incrementTransport();
 }
 
 function mapStateToProps(state) {
