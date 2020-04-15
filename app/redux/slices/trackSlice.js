@@ -39,7 +39,6 @@ const trackSlice = createSlice({
       }
     },
     selectStep(state, action) {
-      console.log('select step')
       state.curSelectedStep.trackId = action.payload.trackId;
       state.curSelectedStep.step = action.payload.step;
     },
@@ -69,21 +68,16 @@ const trackSlice = createSlice({
       state.transport = (state.transport + 1) % 16;
     },
     triggerEvent(state, action) {
-      console.log('trigger event reducer')
+      // do nothing, action is handled in middleware
     }
   }
 })
 
 function createTrack(payload, numSteps) {
-  // const synth = new Tone.Synth();
-  // const channel = new Tone.Channel(-30).toMaster();
-  // synth.connect(channel);
-
   let track = {
     id: payload.id,
     name: payload.name,
     events: [],
-    // inst: synth,
   };
   for (let i = 0; i < numSteps; i++) {
     track.events.push({ type: 'rest', active: false });

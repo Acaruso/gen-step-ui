@@ -1,6 +1,8 @@
 import * as Tone from 'tone';
 
 const instMiddleware = (store) => {
+  // need to keep tonejs insturments outside of redux store because they are non-serializable
+  // can put them here and they will persist for lifetime of application
   const insts = {};
 
   return next => action => {
