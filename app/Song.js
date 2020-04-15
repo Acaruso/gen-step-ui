@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Track from './Track';
 import EventEditor from './EventEditor';
 import Transport from './Transport';
-import { addTrack, deleteTrackByName, incrementTransport } from './redux/slices/trackSlice';
+import { addTrack, deleteTrackByName, incrementTransport, triggerEvent } from './redux/slices/trackSlice';
 import { connect } from 'react-redux';
 import * as Tone from 'tone';
 
@@ -20,29 +20,23 @@ function tick(time, args) {
 
   const curEvent = tracks[0].events[transport];
 
-  console.log('-----------------------------------')
-  console.log(transport)
-  console.log(curEvent)
-
   if (curEvent && curEvent.type !== 'rest') {
-    // const synth = new Tone.Synth();
-    // const chorus = new Tone.Chorus(4, 2.5, 0.5).toMaster();
-    // synth.connect(chorus);
-
-    const synth = new Tone.Synth();
-    const channel = new Tone.Channel(-30).toMaster();
-    synth.connect(channel);
-
-    synth.triggerAttackRelease(curEvent.note, "8n");
-
-    // synth.triggerAttackRelease('e3', "8n", time);
+    args.triggerEvent();
   }
+
+  // for (const track of tracks) {
+  //   const curEvent = track.events[transport];
+
+  //   if (curEvent && curEvent.type !== 'rest') {
+  //     args.triggerEvent();
+  //   }
+  // }
 
   args.incrementTransport();
 }
 
 
-function Song({tracks, addTrack, deleteTrackByName, incrementTransport}) {
+function Song({tracks, addTrack, deleteTrackByName, incrementTransport, triggerEvent}) {
   const [trackNameValue, setTrackNameValue] = useState('');
   const [deleteTrackNameValue, setDeleteTrackNameValue] = useState('');
   const [loop, setLoop] = useState({});
@@ -59,8 +53,13 @@ function Song({tracks, addTrack, deleteTrackByName, incrementTransport}) {
     Tone.Transport.start();
 
     const _loop = new Tone.Event(
-      tick, 
-      { tracks: refTracks, transport: transport, incrementTransport: incrementTransport } 
+      tick,
+      {
+        tracks: refTracks,
+        transport: transport,
+        incrementTransport: incrementTransport,
+        triggerEvent: triggerEvent
+      } 
     );
 
     _loop.loop = true;
@@ -133,7 +132,7 @@ function mapStateToProps(state) {
   }
 }
 
-const mapDispatchToProps = { addTrack, deleteTrackByName, incrementTransport };
+const mapDispatchToProps = { addTrack, deleteTrackByName, incrementTransport, triggerEvent };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Song);
 

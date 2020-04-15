@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import * as Tone from 'tone';
 
 let nextTrackId = 0;
 
@@ -65,15 +66,23 @@ const trackSlice = createSlice({
     },
     incrementTransport(state, action) {
       state.transport = (state.transport + 1) % 16;
+    },
+    triggerEvent(state, action) {
+      console.log('trigger event reducer')
     }
   }
 })
 
 function createTrack(payload, numSteps) {
+  // const synth = new Tone.Synth();
+  // const channel = new Tone.Channel(-30).toMaster();
+  // synth.connect(channel);
+
   let track = {
     id: payload.id,
     name: payload.name,
-    events: []
+    events: [],
+    // inst: synth,
   };
   for (let i = 0; i < numSteps; i++) {
     track.events.push({ type: 'rest', active: false });
@@ -81,6 +90,14 @@ function createTrack(payload, numSteps) {
   return track;
 }
 
-export const { addTrack, updateEvent, selectStep, deleteTrackById, deleteTrackByName, incrementTransport } = trackSlice.actions
+export const {
+  addTrack,
+  updateEvent,
+  selectStep,
+  deleteTrackById,
+  deleteTrackByName,
+  incrementTransport,
+  triggerEvent
+} = trackSlice.actions
 
 export default trackSlice.reducer
