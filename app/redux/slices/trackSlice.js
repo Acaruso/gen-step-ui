@@ -39,6 +39,7 @@ const trackSlice = createSlice({
       }
     },
     selectStep(state, action) {
+      console.log('select step')
       state.curSelectedStep.trackId = action.payload.trackId;
       state.curSelectedStep.step = action.payload.step;
     },

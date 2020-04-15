@@ -10,7 +10,8 @@ import * as Tone from 'tone';
 // think of it as being scheduled for the next tick
 // hence weird transport math -- need to "look ahead"
 function tick(time, args) {
-  const tracks = args.tracks.current;
+  const tracks = args.tracks.current.items;
+  const trackIds = args.tracks.current.ids;
   let transport = args.transport.current;
 
   transport = transport + 1;
@@ -18,19 +19,14 @@ function tick(time, args) {
     transport = 0;
   }
 
-  const curEvent = tracks[0].events[transport];
+  for (const id of trackIds) {
+    const track = tracks[id];
+    const event = track.events[transport];
 
-  if (curEvent && curEvent.type !== 'rest') {
-    args.triggerEvent();
+    if (event && event.type !== 'rest') {
+      args.triggerEvent({id: id, event: event});
+    }
   }
-
-  // for (const track of tracks) {
-  //   const curEvent = track.events[transport];
-
-  //   if (curEvent && curEvent.type !== 'rest') {
-  //     args.triggerEvent();
-  //   }
-  // }
 
   args.incrementTransport();
 }
@@ -46,7 +42,7 @@ function Song({tracks, addTrack, deleteTrackByName, incrementTransport, triggerE
   const transport = useRef(0);
   transport.current = tracks.transport;
   const refTracks = useRef({});
-  refTracks.current = tracks.items;
+  refTracks.current = tracks;
 
   useEffect(() => {
     Tone.Transport.bpm.value = 50;
