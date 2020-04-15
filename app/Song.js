@@ -6,6 +6,28 @@ import { addTrack, deleteTrackByName, incrementTransport } from './redux/slices/
 import { connect } from 'react-redux';
 import * as Tone from 'tone';
 
+function tick(time, args) {
+  const tracks = args.tracks.current;
+  const transport = args.transport.current;
+
+  const curEvent = tracks[0].events[transport];
+
+  console.log('-----------------------------------')
+  console.log(transport)
+  console.log(curEvent)
+
+  if (curEvent && curEvent.type !== 'rest') {
+    // const synth = new Tone.Synth();
+    // const chorus = new Tone.Chorus(4, 2.5, 0.5).toMaster();
+    // synth.connect(chorus);
+
+    const synth = new Tone.Synth().toMaster();
+    synth.triggerAttackRelease("C2", "32n", time);
+  }
+
+  args.incrementTransport();
+}
+
 
 function Song({tracks, addTrack, deleteTrackByName, incrementTransport}) {
   const [trackNameValue, setTrackNameValue] = useState('');
@@ -20,7 +42,7 @@ function Song({tracks, addTrack, deleteTrackByName, incrementTransport}) {
   refTracks.current = tracks.items;
 
   useEffect(() => {
-    Tone.Transport.bpm.value = 120;
+    Tone.Transport.bpm.value = 50;
     Tone.Transport.start();
 
     const _loop = new Tone.Event(
@@ -88,19 +110,6 @@ function Song({tracks, addTrack, deleteTrackByName, incrementTransport}) {
       <button onClick={onClickStop}>Stop</button>
     </>
   );
-}
-
-function tick(time, args) {
-  const tracks = args.tracks.current;
-  const transport = args.transport.current;
-
-  const curEvent = tracks[0].events[transport];
-
-  if (curEvent && curEvent.type !== 'rest') {
-    console.log('!!!!!!!!!!!!!!')
-  }
-
-  args.incrementTransport();
 }
 
 function mapStateToProps(state) {

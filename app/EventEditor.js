@@ -22,7 +22,8 @@ function EventEditor({curEvent, curSelectedStep, updateEvent}) {
   }
 
   function onChangeNote(e) {
-    const newNote = e.target.value.replace(/\D/,'');
+    // const newNote = e.target.value.replace(/\D/,'');
+    const newNote = e.target.value;
     _updateEvent({
       ...curEvent,
       note: newNote,
@@ -50,6 +51,7 @@ function EventEditor({curEvent, curSelectedStep, updateEvent}) {
       id: curSelectedStep.trackId,
       event: curSelectedStep.step,
       active: event.active,
+      type: event.type,
       note: event.note,
       vel: event.vel, 
       dur: event.dur
