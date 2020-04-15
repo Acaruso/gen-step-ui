@@ -6,9 +6,17 @@ import { addTrack, deleteTrackByName, incrementTransport } from './redux/slices/
 import { connect } from 'react-redux';
 import * as Tone from 'tone';
 
+// everything you do inside tick, for ex triggering audio events,
+// think of it as being scheduled for the next tick
+// hence weird transport math -- need to "look ahead"
 function tick(time, args) {
   const tracks = args.tracks.current;
-  const transport = args.transport.current;
+  let transport = args.transport.current;
+
+  transport = transport + 1;
+  if (transport === 16) {
+    transport = 0;
+  }
 
   const curEvent = tracks[0].events[transport];
 
@@ -21,8 +29,13 @@ function tick(time, args) {
     // const chorus = new Tone.Chorus(4, 2.5, 0.5).toMaster();
     // synth.connect(chorus);
 
-    const synth = new Tone.Synth().toMaster();
-    synth.triggerAttackRelease("C2", "32n", time);
+    const synth = new Tone.Synth();
+    const channel = new Tone.Channel(-30).toMaster();
+    synth.connect(channel);
+
+    synth.triggerAttackRelease(curEvent.note, "8n");
+
+    // synth.triggerAttackRelease('e3', "8n", time);
   }
 
   args.incrementTransport();
@@ -101,13 +114,15 @@ function Song({tracks, addTrack, deleteTrackByName, incrementTransport}) {
             <button onClick={onDeleteTrack}>Delete Track</button>
             <input type='text' value={deleteTrackNameValue} onChange={onChangeDeleteTrackName} />
           </div>
+          <div>
+            <button onClick={onClickPlay}>Play</button>
+            <button onClick={onClickStop}>Stop</button>
+          </div>
           <Transport transport={tracks.transport}/>
           {trackElts}
         </div>
         <EventEditor />
       </div>
-      <button onClick={onClickPlay}>Play</button>
-      <button onClick={onClickStop}>Stop</button>
     </>
   );
 }

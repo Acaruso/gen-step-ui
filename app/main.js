@@ -1,9 +1,9 @@
-const { app, BrowserWindow, dialog } = require('electron');
+const { app, BrowserWindow, dialog, ipcMain } = require('electron');
 const fs = require('fs');
 
 let win = null;
 
-function createWindow () {
+function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
     width: 1400,
@@ -15,12 +15,13 @@ function createWindow () {
 
   // and load the index.html of the app.
   win.loadFile(__dirname + '/../app/index.html');
-  // win.loadFile('Users/ajc/development/java/gen-step-ui/app/index.html');
 
   // Open the DevTools.
   win.webContents.openDevTools()
 
-  // getFile();
+  ipcMain.on('open-file-dialog', (event, arg) => {
+    getFile();
+  })
 }
 
 // This method will be called when Electron has finished
@@ -45,14 +46,12 @@ app.on('activate', () => {
   }
 })
 
-const getFile = exports.getFile = () => {
+function getFile() {
   dialog.showOpenDialog(win, {
     properties: ['openFile']
   })
   .then((res) => {
-    const file = res.filePaths[0];
-    const content = fs.readFileSync(file).toString();
-    console.log(content);
-    win.webContents.send('file-opened', file, content);
+    const filePath = res.filePaths[0];
+    win.webContents.send('file-path-loaded', filePath)
   });
 };

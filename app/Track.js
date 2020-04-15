@@ -1,17 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from "react-redux";
 import { selectStep } from "./redux/slices/trackSlice";
+const { ipcRenderer } = require('electron')
 
 function Track({track, curSelectedStep, selectStep}) {
-  const onSquareClick = (index) => {
+  useEffect(() => {
+    ipcRenderer.on('file-path-loaded', (event, arg) => {
+      console.log('file-path-loaded ----------------------------');
+      console.log(arg);
+    });
+  }, []);
+
+  function onClickSquare(index) {
     selectStep({trackId: track.id, step: index});
   };
+
+  function onClickLoadSample() {
+    ipcRenderer.send('open-file-dialog');
+  }
 
   const squares = track.events.map((event, i) => {
     const selected = curSelectedStep.trackId === track.id && curSelectedStep.step === i;
     const hasEvent = event.active;
     return (
-      <Square selected={selected} hasEvent={hasEvent} onSquareClick={onSquareClick} index={i} key={i}/>
+      <Square selected={selected} hasEvent={hasEvent} onClickSquare={onClickSquare} index={i} key={i}/>
     );
   });
 
@@ -21,11 +33,12 @@ function Track({track, curSelectedStep, selectStep}) {
       <div className="track">
         {squares}
       </div>
+      <button onClick={onClickLoadSample}>Load Sample</button>
     </>
   );
 }
 
-function Square({selected, hasEvent, onSquareClick, index}) {
+function Square({selected, hasEvent, onClickSquare, index}) {
   let classNames = ['square'];
   if (selected) {
     classNames.push('selected-square');
@@ -37,7 +50,7 @@ function Square({selected, hasEvent, onSquareClick, index}) {
   return (
     <span 
       className={className}
-      onClick={() => onSquareClick(index)}
+      onClick={() => onClickSquare(index)}
     >
       { index % 4 === 0 ? 'X' : ''}
     </span>
