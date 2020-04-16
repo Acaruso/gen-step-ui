@@ -44,11 +44,15 @@
 }
 
 .square.has-event {
-  background-color: lightcoral;
+  background-color: rgb(105, 157, 255);
 }
 
 .square.selected-square {
-  background-color: cadetblue;
+  background-color: rgb(48, 120, 255);
+}
+
+.square.has-event.selected-square {
+  background-color: rgb(0, 89, 255);
 }
 
 button {
@@ -70,4 +74,8 @@ input {
   margin-bottom: 5px;
   display: grid;
   grid-template-columns: 10% 90%;
+}
+
+.song-input {
+  width: 70px;
 }

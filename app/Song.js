@@ -36,6 +36,7 @@ function Song({tracks, addTrack, deleteTrackByName, incrementTransport, triggerE
   const [trackNameValue, setTrackNameValue] = useState('');
   const [deleteTrackNameValue, setDeleteTrackNameValue] = useState('');
   const [loop, setLoop] = useState({});
+  const [bpm, setBpm] = useState(120);
 
   // not sure why this is necessary, but Tone.Event callback doesn't read updated values from redux
   // but it can read them from a ref
@@ -45,7 +46,7 @@ function Song({tracks, addTrack, deleteTrackByName, incrementTransport, triggerE
   refTracks.current = tracks;
 
   useEffect(() => {
-    Tone.Transport.bpm.value = 50;
+    Tone.Transport.bpm.value = bpm;
     Tone.Transport.start();
 
     const _loop = new Tone.Event(
@@ -69,14 +70,23 @@ function Song({tracks, addTrack, deleteTrackByName, incrementTransport, triggerE
     return <Track track={track} key={id} />;
   });
 
-  function onAddTrack() {
+  function onClickAddTrack() {
     addTrack({name: trackNameValue});
     setTrackNameValue('');
   }
 
-  function onDeleteTrack() {
+  function onClickDeleteTrack() {
     deleteTrackByName({name: deleteTrackNameValue});
     setDeleteTrackNameValue('');
+  }
+
+  function onClickSetBpm() {
+    Tone.Transport.bpm.value = bpm;
+  }
+  
+  function onChangeSetBPM(e) {
+    const bpm = e.target.value.replace(/\D/,'');
+    setBpm(bpm);
   }
 
   function onChangeDeleteTrackName(e) {
@@ -97,17 +107,19 @@ function Song({tracks, addTrack, deleteTrackByName, incrementTransport, triggerE
 
   return (
     <>
-      <div className='grid'>
+      <div className="grid">
         <div>
           <div>
             <button>Load Song</button>
             <button>Save Song</button>
           </div>
           <div>
-            <button onClick={onAddTrack}>Add Track</button>
-            <input type='text' value={trackNameValue} onChange={onChangeTrackName} />
-            <button onClick={onDeleteTrack}>Delete Track</button>
-            <input type='text' value={deleteTrackNameValue} onChange={onChangeDeleteTrackName} />
+            <button onClick={onClickAddTrack}>Add Track</button>
+            <input type="text" className="song-input" value={trackNameValue} onChange={onChangeTrackName} />
+            <button onClick={onClickDeleteTrack}>Delete Track</button>
+            <input type="text" className="song-input" value={deleteTrackNameValue} onChange={onChangeDeleteTrackName} />
+            <button onClick={onClickSetBpm}>Set BPM</button>
+            <input type="text" className="song-input" value={bpm} onChange={onChangeSetBPM} />
           </div>
           <div>
             <button onClick={onClickPlay}>Play</button>
