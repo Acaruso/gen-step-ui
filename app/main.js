@@ -20,7 +20,7 @@ function createWindow() {
   win.webContents.openDevTools()
 
   ipcMain.on('open-file-dialog', (event, arg) => {
-    getFile();
+    getFile(arg);
   })
 }
 
@@ -46,10 +46,10 @@ app.on('activate', () => {
   }
 })
 
-function getFile() {
-  dialog.showOpenDialog(win, {
-    properties: ['openFile']
-  })
+function getFile(arg) {
+  console.log('get file')
+  console.log(arg)
+  dialog.showOpenDialog(win, { properties: ['openFile'] })
   .then((res) => {
     const filePath = res.filePaths[0];
     win.webContents.send('file-path-loaded', filePath)

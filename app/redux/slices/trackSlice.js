@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import * as Tone from 'tone';
 
 let nextTrackId = 0;
 
@@ -69,6 +68,9 @@ const trackSlice = createSlice({
     },
     triggerEvent(state, action) {
       // do nothing, action is handled in middleware
+    },
+    loadSample(state, action) {
+      // ...
     }
   }
 })
@@ -92,7 +94,8 @@ export const {
   deleteTrackById,
   deleteTrackByName,
   incrementTransport,
-  triggerEvent
+  triggerEvent,
+  loadSample,
 } = trackSlice.actions
 
 export default trackSlice.reducer

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from "react-redux";
-import { selectStep } from "./redux/slices/trackSlice";
+import { selectStep, loadSample } from "./redux/slices/trackSlice";
 const { ipcRenderer } = require('electron')
 
-function Track({track, curSelectedStep, selectStep}) {
+function Track({track, curSelectedStep, selectStep, loadSample}) {
   useEffect(() => {
-    ipcRenderer.on('file-path-loaded', (event, arg) => {
-      console.log('file-path-loaded ----------------------------');
-      console.log(arg);
+    // set up event listener on file-path-loaded event
+    ipcRenderer.on('file-path-loaded', (event, filePath) => {
+      loadSample({trackId: track.id, filePath: filePath});
     });
   }, []);
 
@@ -16,7 +16,7 @@ function Track({track, curSelectedStep, selectStep}) {
   };
 
   function onClickLoadSample() {
-    ipcRenderer.send('open-file-dialog');
+    ipcRenderer.send('open-file-dialog', 111);
   }
 
   const squares = track.events.map((event, i) => {
@@ -63,6 +63,6 @@ function mapStateToProps(state) {
   }
 }
 
-const mapDispatchToProps = { selectStep };
+const mapDispatchToProps = { selectStep, loadSample };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Track);

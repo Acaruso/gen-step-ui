@@ -13,20 +13,36 @@ const instMiddleware = (store) => {
         const ids = store.getState().tracks.ids;
         const lastAddedId = ids[ids.length - 1];
 
-        const synth = new Tone.Synth();
-        const channel = new Tone.Channel(-30).toMaster();
-        synth.connect(channel);
+        // const synth = new Tone.Synth();
+        // const channel = new Tone.Channel(-30).toMaster();
+        // synth.connect(channel);
 
-        insts[lastAddedId] = synth;
+        const sampler = new Tone.Sampler();
+        const channel = new Tone.Channel(-10).toMaster();
+        sampler.connect(channel);
+
+        insts[lastAddedId] = sampler;
 
         return res;
 
       case 'tracks/triggerEvent':
-        const id = action.payload.id;
-        const event = action.payload.event;
-        const note = event.note.length === 0 ? 'C3' : event.note;
+        const { id, event, time } = action.payload;
 
-        insts[id].triggerAttackRelease(note, '8n');
+        // if event.note is empty string, make it C4
+        const note = event.note.length === 0 ? 'C4' : event.note;
+
+        insts[id].triggerAttackRelease(note, '8n', time);
+        return next(action);
+
+      case 'tracks/loadSample':
+        const { _id, filePath } = action.payload;
+
+        console.log('load sample')
+        console.log(insts)
+        console.log(_id)
+
+        insts[_id].add('C4', filePath);
+        
         return next(action);
 
       default:
