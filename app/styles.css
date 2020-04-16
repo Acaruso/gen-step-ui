@@ -44,7 +44,7 @@
 }
 
 .square.has-event {
-  background-color: rgb(105, 157, 255);
+  background-color: rgb(196, 216, 255);
 }
 
 .square.selected-square {
@@ -52,7 +52,7 @@
 }
 
 .square.has-event.selected-square {
-  background-color: rgb(0, 89, 255);
+  background-color: rgb(0, 67, 191);
 }
 
 button {

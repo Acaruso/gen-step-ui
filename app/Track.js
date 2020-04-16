@@ -4,9 +4,6 @@ import { selectStep, loadSample, updateEvent } from "./redux/slices/trackSlice";
 const { ipcRenderer } = require('electron')
 
 function Track({track, curSelectedStep, selectStep, loadSample, updateEvent}) {
-  console.log('track')
-  console.log(track)
-
   useEffect(() => {
     // set up event listener on file-path-loaded event
     ipcRenderer.on('file-path-loaded', (event, args) => {
@@ -61,6 +58,7 @@ function Track({track, curSelectedStep, selectStep, loadSample, updateEvent}) {
         {squares}
       </div>
       <button onClick={onClickLoadSample}>Load Sample</button>
+      <span>Sample: {track.sampleName || 'No sample loaded'}</span>
     </>
   );
 }

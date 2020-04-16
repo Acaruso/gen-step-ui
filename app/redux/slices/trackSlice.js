@@ -70,7 +70,11 @@ const trackSlice = createSlice({
       // do nothing, action is handled in middleware
     },
     loadSample(state, action) {
-      // ...
+      const { trackId, filePath } = action.payload;
+      const track = state.items[trackId];
+      const splits = filePath.split('\\');
+      const sampleName = splits[splits.length - 1]
+      track.sampleName = sampleName ? sampleName : 'No sample loaded'
     }
   }
 })
@@ -80,6 +84,7 @@ function createTrack(payload, numSteps) {
     id: payload.id,
     name: payload.name,
     events: [],
+    sampleName: '',
   };
   for (let i = 0; i < numSteps; i++) {
     track.events.push({ type: 'rest', active: false });
