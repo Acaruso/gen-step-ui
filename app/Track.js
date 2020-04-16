@@ -6,8 +6,13 @@ const { ipcRenderer } = require('electron')
 function Track({track, curSelectedStep, selectStep, loadSample}) {
   useEffect(() => {
     // set up event listener on file-path-loaded event
-    ipcRenderer.on('file-path-loaded', (event, filePath) => {
-      loadSample({trackId: track.id, filePath: filePath});
+    ipcRenderer.on('file-path-loaded', (event, args) => {
+      const { filePath, trackId } = args;
+
+      // only load sample if event is for this/current track
+      if (trackId === track.id) {
+        loadSample({trackId: track.id, filePath: filePath});
+      }
     });
   }, []);
 
@@ -16,7 +21,7 @@ function Track({track, curSelectedStep, selectStep, loadSample}) {
   };
 
   function onClickLoadSample() {
-    ipcRenderer.send('open-file-dialog', 111);
+    ipcRenderer.send('open-file-dialog', {trackId: track.id});
   }
 
   const squares = track.events.map((event, i) => {

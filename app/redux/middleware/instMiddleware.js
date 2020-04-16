@@ -35,13 +35,9 @@ const instMiddleware = (store) => {
         return next(action);
 
       case 'tracks/loadSample':
-        const { _id, filePath } = action.payload;
+        const { trackId, filePath } = action.payload;
 
-        console.log('load sample')
-        console.log(insts)
-        console.log(_id)
-
-        insts[_id].add('C4', filePath);
+        insts[trackId].add('C4', filePath);
         
         return next(action);
 

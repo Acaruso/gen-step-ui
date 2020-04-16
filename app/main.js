@@ -19,8 +19,8 @@ function createWindow() {
   // Open the DevTools.
   win.webContents.openDevTools()
 
-  ipcMain.on('open-file-dialog', (event, arg) => {
-    getFile(arg);
+  ipcMain.on('open-file-dialog', (event, args) => {
+    getFile(args);
   })
 }
 
@@ -47,11 +47,10 @@ app.on('activate', () => {
 })
 
 function getFile(arg) {
-  console.log('get file')
-  console.log(arg)
+  const { trackId } = arg;
   dialog.showOpenDialog(win, { properties: ['openFile'] })
   .then((res) => {
     const filePath = res.filePaths[0];
-    win.webContents.send('file-path-loaded', filePath)
+    win.webContents.send('file-path-loaded', {filePath: filePath, trackId: trackId})
   });
 };
