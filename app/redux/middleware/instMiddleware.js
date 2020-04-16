@@ -35,10 +35,13 @@ const instMiddleware = (store) => {
         return next(action);
 
       case 'tracks/loadSample':
-        const { trackId, filePath } = action.payload;
+        let { trackId, filePath } = action.payload;
+
+        const enc = encodeURIComponent('#');
+        filePath = filePath.replace('#', enc)
 
         insts[trackId].add('C4', filePath);
-        
+
         return next(action);
 
       default:
