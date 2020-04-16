@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Track from './Track';
 import EventEditor from './EventEditor';
 import Transport from './Transport';
+import ProbabilityMatrix from './ProbabilityMatrix';
 import { addTrack, deleteTrackByName, incrementTransport, triggerEvent } from './redux/slices/trackSlice';
 import { connect } from 'react-redux';
 import * as Tone from 'tone';
@@ -128,7 +129,10 @@ function Song({tracks, addTrack, deleteTrackByName, incrementTransport, triggerE
           <Transport transport={tracks.transport}/>
           {trackElts}
         </div>
-        <EventEditor />
+        <div>
+          <EventEditor />
+          <ProbabilityMatrix />
+        </div>
       </div>
     </>
   );

@@ -59,7 +59,7 @@ function EventEditor({curEvent, curSelectedStep, updateEvent}) {
   }
 
   return (
-    <div>
+    <div className="event-editor">
       <h3>Event Editor</h3>
       <EventEditorForm 
         curEvent={curEvent} 

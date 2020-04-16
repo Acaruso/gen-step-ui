@@ -65,6 +65,11 @@ input {
   margin-right: 5px;
 }
 
+.event-editor {
+  max-height: 150px;
+  min-height: 150px;
+}
+
 .event-editor-input {
   width: 60px;
   margin-left: 5px;
