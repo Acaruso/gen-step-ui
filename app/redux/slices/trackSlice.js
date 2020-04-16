@@ -12,6 +12,7 @@ const trackSlice = createSlice({
       trackId: -1,
       step: -1
     },
+    transport: -1,
   },
   reducers: {
     addTrack: {
@@ -61,6 +62,19 @@ const trackSlice = createSlice({
         delete state.items[toDeleteId];
         state.ids = state.ids.filter((elt) => elt !== toDeleteId);
       }
+    },
+    incrementTransport(state, action) {
+      state.transport = (state.transport + 1) % 16;
+    },
+    triggerEvent(state, action) {
+      // do nothing, action is handled in middleware
+    },
+    loadSample(state, action) {
+      const { trackId, filePath } = action.payload;
+      const track = state.items[trackId];
+      const splits = filePath.split('\\');
+      const sampleName = splits[splits.length - 1]
+      track.sampleName = sampleName ? sampleName : 'No sample loaded'
     }
   }
 })
@@ -69,7 +83,8 @@ function createTrack(payload, numSteps) {
   let track = {
     id: payload.id,
     name: payload.name,
-    events: []
+    events: [],
+    sampleName: '',
   };
   for (let i = 0; i < numSteps; i++) {
     track.events.push({ type: 'rest', active: false });
@@ -77,6 +92,15 @@ function createTrack(payload, numSteps) {
   return track;
 }
 
-export const { addTrack, updateEvent, selectStep, deleteTrackById, deleteTrackByName } = trackSlice.actions
+export const {
+  addTrack,
+  updateEvent,
+  selectStep,
+  deleteTrackById,
+  deleteTrackByName,
+  incrementTransport,
+  triggerEvent,
+  loadSample,
+} = trackSlice.actions
 
 export default trackSlice.reducer

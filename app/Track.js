@@ -1,17 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from "react-redux";
-import { selectStep } from "./redux/slices/trackSlice";
+import { selectStep, loadSample, updateEvent } from "./redux/slices/trackSlice";
+const { ipcRenderer } = require('electron')
 
-function Track({track, curSelectedStep, selectStep}) {
-  const onSquareClick = (index) => {
+function Track({track, curSelectedStep, selectStep, loadSample, updateEvent}) {
+  useEffect(() => {
+    // set up event listener on file-path-loaded event
+    ipcRenderer.on('file-path-loaded', (event, args) => {
+      const { filePath, trackId } = args;
+
+      // only load sample if event is for this/current track
+      if (trackId === track.id) {
+        loadSample({trackId: track.id, filePath: filePath});
+      }
+    });
+  }, []);
+
+  function onClickSquare(index) {
     selectStep({trackId: track.id, step: index});
   };
+
+  function onDoubleClickSquare(index) {
+    updateEvent({
+      id: track.id,
+      event: index,
+      active: true,
+      type: 'note',
+      note: '',
+      vel: '', 
+      dur: ''
+    });
+  };
+
+  function onClickLoadSample() {
+    ipcRenderer.send('open-file-dialog', {trackId: track.id});
+  }
 
   const squares = track.events.map((event, i) => {
     const selected = curSelectedStep.trackId === track.id && curSelectedStep.step === i;
     const hasEvent = event.active;
     return (
-      <Square selected={selected} hasEvent={hasEvent} onSquareClick={onSquareClick} index={i} key={i}/>
+      <Square
+        selected={selected}
+        hasEvent={hasEvent}
+        onClickSquare={onClickSquare}
+        onDoubleClickSquare={onDoubleClickSquare}
+        index={i}
+        key={i}
+      />
     );
   });
 
@@ -21,15 +57,18 @@ function Track({track, curSelectedStep, selectStep}) {
       <div className="track">
         {squares}
       </div>
+      <button onClick={onClickLoadSample}>Load Sample</button>
+      <span>Sample: {track.sampleName || 'No sample loaded'}</span>
     </>
   );
 }
 
-function Square({selected, hasEvent, onSquareClick, index}) {
+function Square({selected, hasEvent, onClickSquare, onDoubleClickSquare, index}) {
   let classNames = ['square'];
   if (selected) {
     classNames.push('selected-square');
-  } else if (hasEvent) {
+  } 
+  if (hasEvent) {
     classNames.push('has-event');
   }
   const className = classNames.join(' ');
@@ -37,7 +76,8 @@ function Square({selected, hasEvent, onSquareClick, index}) {
   return (
     <span 
       className={className}
-      onClick={() => onSquareClick(index)}
+      onClick={() => onClickSquare(index)}
+      onDoubleClick={() => onDoubleClickSquare(index)}
     >
       { index % 4 === 0 ? 'X' : ''}
     </span>
@@ -50,6 +90,6 @@ function mapStateToProps(state) {
   }
 }
 
-const mapDispatchToProps = { selectStep };
+const mapDispatchToProps = { selectStep, loadSample, updateEvent };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Track);

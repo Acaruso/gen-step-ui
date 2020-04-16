@@ -4,7 +4,14 @@
     <meta charset="UTF-8">
     <title>gen step</title>
     <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval';" />
+    <!-- <meta 
+      http-equiv="Content-Security-Policy" 
+      content="script-src 'self' 'unsafe-eval';"
+    /> -->
+    <meta 
+      http-equiv="Content-Security-Policy" 
+      content="default-src * data: 'unsafe-eval' 'unsafe-inline' blob:"
+    />
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script defer src="../dist/renderer-bundle.js"></script>
   </head>
