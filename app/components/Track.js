@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from "react-redux";
-import { selectStep, loadSample, updateEvent } from "./redux/slices/trackSlice";
+import { selectStep, loadSample, updateEvent } from "../redux/slices/trackSlice";
 const { ipcRenderer } = require('electron')
 
 function Track({track, curSelectedStep, selectStep, loadSample, updateEvent}) {

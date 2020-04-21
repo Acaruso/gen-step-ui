@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { createSelector } from '@reduxjs/toolkit'
 import { connect } from 'react-redux'
-import { updateEvent } from './redux/slices/trackSlice';
+import { updateEvent } from '../redux/slices/trackSlice';
 
 function EventEditor({curEvent, curSelectedStep, updateEvent}) {
   function onClickCreateEvent(e) {
