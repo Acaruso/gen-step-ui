@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from "react-redux";
 import { selectStep, loadSample, updateEvent } from "../redux/slices/trackSlice";
 const { ipcRenderer } = require('electron')
+import { createEvent } from "../util/utils";
 
 function Track({track, curSelectedStep, selectStep, loadSample, updateEvent}) {
   useEffect(() => {
@@ -21,15 +22,21 @@ function Track({track, curSelectedStep, selectStep, loadSample, updateEvent}) {
   };
 
   function onDoubleClickSquare(index) {
-    updateEvent({
-      id: track.id,
-      event: index,
-      active: true,
-      type: 'note',
-      note: '',
-      vel: '', 
-      dur: ''
-    });
+    if (track.events[index].active) {
+      const event = createEvent("rest");
+      updateEvent({
+        id: track.id,
+        eventIdx: index,
+        event: event,
+      });
+    } else {
+      const event = createEvent("note");
+      updateEvent({
+        id: track.id,
+        eventIdx: index,
+        event: event,
+      });
+    }
   };
 
   function onClickLoadSample() {

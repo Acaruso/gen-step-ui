@@ -29,12 +29,15 @@ const trackSlice = createSlice({
     updateEvent(state, action) {
       const payload = action.payload;
       const track = state.items[payload.id];
+      const eventIdx = payload.eventIdx;
+      const event = payload.event;
       if (track) {
-        track.events[payload.event].type = payload.type;
-        track.events[payload.event].active = payload.active;
-        track.events[payload.event].note = payload.note;
-        track.events[payload.event].vel = payload.vel;
-        track.events[payload.event].dur = payload.dur;
+        track.events[eventIdx] = event;
+        // track.events[eventIdx].type = payload.type;
+        // track.events[eventIdx].active = payload.active;
+        // track.events[eventIdx].note = payload.note;
+        // track.events[eventIdx].vel = payload.vel;
+        // track.events[eventIdx].dur = payload.dur;
       }
     },
     selectStep(state, action) {
