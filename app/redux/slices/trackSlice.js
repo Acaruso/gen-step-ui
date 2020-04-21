@@ -1,23 +1,23 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 let nextTrackId = 0;
 let nextEventId = "a";
 
 const trackSlice = createSlice({
-  name: 'tracks',
+  name: "tracks",
   initialState: {
     items: {},
     ids: [],
     numSteps: 16,
     curSelectedStep: {
       trackId: -1,
-      step: -1
+      step: -1,
     },
     transport: -1,
     probMatrix: {
-      rows: {},   // a: { id: 'a', event: { trackId, eventIdx } }
-      ids: [],    // ['a', 'b', ...]
-      data: []    // 2d array of probabilities
+      rows: {}, // a: { id: 'a', event: { trackId, eventIdx } }
+      ids: [],  // ['a', 'b', ...]
+      data: [], // 2d array of probabilities
     },
   },
   reducers: {
@@ -28,9 +28,8 @@ const trackSlice = createSlice({
         state.ids.push(newTrack.id);
       },
       prepare(data) {
-        let res = { payload: { ...data, id: nextTrackId++ } }
-        return res
-      }
+        return { payload: { ...data, id: nextTrackId++ } };
+      },
     },
     updateEvent(state, action) {
       const payload = action.payload;
@@ -76,9 +75,9 @@ const trackSlice = createSlice({
     loadSample(state, action) {
       const { trackId, filePath } = action.payload;
       const track = state.items[trackId];
-      const splits = filePath.split('\\');
-      const sampleName = splits[splits.length - 1]
-      track.sampleName = sampleName ? sampleName : 'No sample loaded'
+      const splits = filePath.split("\\");
+      const sampleName = splits[splits.length - 1];
+      track.sampleName = sampleName ? sampleName : "No sample loaded";
     },
     addToProbMatrix: {
       reducer(state, action) {
@@ -92,28 +91,27 @@ const trackSlice = createSlice({
       prepare(data) {
         const id = nextEventId;
         nextEventId = getNextChar(nextEventId);
-        const res = { payload: { ...data, eventId: id } }
-        return res
-      }
-    }
-  }
-})
+        return { payload: { ...data, eventId: id } };
+      },
+    },
+  },
+});
 
 function createTrack(payload, numSteps) {
   let track = {
     id: payload.id,
     name: payload.name,
     events: [],
-    sampleName: '',
+    sampleName: "",
   };
   for (let i = 0; i < numSteps; i++) {
-    track.events.push({ type: 'rest', active: false });
+    track.events.push({ type: "rest", active: false });
   }
   return track;
 }
 
 function getNextChar(c) {
-  return String.fromCharCode(c.charCodeAt(0) + 1)
+  return String.fromCharCode(c.charCodeAt(0) + 1);
 }
 
 export const {
@@ -126,6 +124,6 @@ export const {
   triggerEvent,
   loadSample,
   addToProbMatrix,
-} = trackSlice.actions
+} = trackSlice.actions;
 
-export default trackSlice.reducer
+export default trackSlice.reducer;
