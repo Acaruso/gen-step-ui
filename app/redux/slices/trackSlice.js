@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 let nextTrackId = 0;
+let nextEventId = "a";
 
 const trackSlice = createSlice({
   name: 'tracks',
@@ -13,6 +14,11 @@ const trackSlice = createSlice({
       step: -1
     },
     transport: -1,
+    probMatrix: {
+      rows: {},   // a: { id: 'a', event: { trackId, eventIdx } }
+      ids: [],    // ['a', 'b', ...]
+      data: []    // 2d array of probabilities
+    },
   },
   reducers: {
     addTrack: {
@@ -33,11 +39,6 @@ const trackSlice = createSlice({
       const event = payload.event;
       if (track) {
         track.events[eventIdx] = event;
-        // track.events[eventIdx].type = payload.type;
-        // track.events[eventIdx].active = payload.active;
-        // track.events[eventIdx].note = payload.note;
-        // track.events[eventIdx].vel = payload.vel;
-        // track.events[eventIdx].dur = payload.dur;
       }
     },
     selectStep(state, action) {
@@ -78,6 +79,22 @@ const trackSlice = createSlice({
       const splits = filePath.split('\\');
       const sampleName = splits[splits.length - 1]
       track.sampleName = sampleName ? sampleName : 'No sample loaded'
+    },
+    addToProbMatrix: {
+      reducer(state, action) {
+        const eventId = action.payload.eventId;
+        const trackId = action.payload.trackId;
+        const eventIdx = action.payload.eventIdx;
+        const event = { trackId: trackId, eventIdx: eventIdx };
+        state.probMatrix.rows[eventId] = { id: eventId, event: event };
+        state.probMatrix.ids.push(eventId);
+      },
+      prepare(data) {
+        const id = nextEventId;
+        nextEventId = getNextChar(nextEventId);
+        const res = { payload: { ...data, eventId: id } }
+        return res
+      }
     }
   }
 })
@@ -95,6 +112,10 @@ function createTrack(payload, numSteps) {
   return track;
 }
 
+function getNextChar(c) {
+  return String.fromCharCode(c.charCodeAt(0) + 1)
+}
+
 export const {
   addTrack,
   updateEvent,
@@ -104,6 +125,7 @@ export const {
   incrementTransport,
   triggerEvent,
   loadSample,
+  addToProbMatrix,
 } = trackSlice.actions
 
 export default trackSlice.reducer

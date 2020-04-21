@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { createSelector } from "@reduxjs/toolkit";
 import { connect } from "react-redux";
-import { updateEvent } from "../redux/slices/trackSlice";
+import { updateEvent, addToProbMatrix } from "../redux/slices/trackSlice";
 import { createEvent } from "../util/utils";
 
-function EventEditor({ curEvent, curSelectedStep, updateEvent }) {
+function EventEditor({ curEvent, curSelectedStep, updateEvent, probMatrix, addToProbMatrix }) {
   function onClickCreateEvent(e) {
     const event = createEvent("note");
     updateEvent({
@@ -59,7 +59,12 @@ function EventEditor({ curEvent, curSelectedStep, updateEvent }) {
     });
   }
 
-  function onClickAddToProbMatrix(e) {}
+  function onClickAddToProbMatrix(e) {
+    addToProbMatrix({
+      trackId: curSelectedStep.trackId,
+      eventIdx: curSelectedStep.step,
+    });
+  }
 
   return (
     <div className="event-editor">
@@ -155,9 +160,10 @@ function mapStateToProps(state) {
   return {
     curEvent: selectCurEvent(state),
     curSelectedStep: state.tracks.curSelectedStep,
+    probMatrix: state.tracks.probMatrix,
   };
 }
 
-const mapDispatchToProps = { updateEvent };
+const mapDispatchToProps = { updateEvent, addToProbMatrix };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventEditor);
