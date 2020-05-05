@@ -45,11 +45,11 @@ function Track({track, curSelectedStep, selectStep, loadSample, updateEvent}) {
 
   const squares = track.events.map((event, i) => {
     const selected = curSelectedStep.trackId === track.id && curSelectedStep.step === i;
-    const hasEvent = event.active;
+    
     return (
       <Square
         selected={selected}
-        hasEvent={hasEvent}
+        event={event}
         onClickSquare={onClickSquare}
         onDoubleClickSquare={onDoubleClickSquare}
         index={i}
@@ -70,12 +70,12 @@ function Track({track, curSelectedStep, selectStep, loadSample, updateEvent}) {
   );
 }
 
-function Square({selected, hasEvent, onClickSquare, onDoubleClickSquare, index}) {
+function Square({selected, event, onClickSquare, onDoubleClickSquare, index}) {
   let classNames = ['square'];
   if (selected) {
     classNames.push('selected-square');
   } 
-  if (hasEvent) {
+  if (event.active) {
     classNames.push('has-event');
   }
   const className = classNames.join(' ');
@@ -86,7 +86,7 @@ function Square({selected, hasEvent, onClickSquare, onDoubleClickSquare, index})
       onClick={() => onClickSquare(index)}
       onDoubleClick={() => onDoubleClickSquare(index)}
     >
-      { index % 4 === 0 ? 'X' : ''}
+      {event.id}
     </span>
   );
 }

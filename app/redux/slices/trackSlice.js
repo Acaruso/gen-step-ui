@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { createEvent } from "../../util/utils";
 
 let nextTrackId = 0;
 let nextEventId = "a";
@@ -15,9 +16,8 @@ const trackSlice = createSlice({
     },
     transport: -1,
     probMatrix: {
-      rows: {}, // a: { id: 'a', event: { trackId, eventIdx } }
+      rows: {}, // a: { id: 'a', event: { trackId, eventIdx }, probs: { } }
       ids: [],  // ['a', 'b', ...]
-      data: [], // 2d array of probabilities
     },
   },
   reducers: {
@@ -81,12 +81,12 @@ const trackSlice = createSlice({
     },
     addToProbMatrix: {
       reducer(state, action) {
-        const eventId = action.payload.eventId;
-        const trackId = action.payload.trackId;
-        const eventIdx = action.payload.eventIdx;
+        const { eventId, trackId, eventIdx } = action.payload;
         const event = { trackId: trackId, eventIdx: eventIdx };
         state.probMatrix.rows[eventId] = { id: eventId, event: event };
         state.probMatrix.ids.push(eventId);
+
+        state.items[trackId].events[eventIdx].id = eventId;
       },
       prepare(data) {
         const id = nextEventId;
@@ -105,7 +105,8 @@ function createTrack(payload, numSteps) {
     sampleName: "",
   };
   for (let i = 0; i < numSteps; i++) {
-    track.events.push({ type: "rest", active: false });
+    track.events.push(createEvent("rest"));
+    // track.events.push({ type: "rest", active: false });
   }
   return track;
 }

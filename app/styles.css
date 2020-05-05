@@ -100,3 +100,8 @@ input {
 .prob-matrix-square + .prob-matrix-square { 
   margin-left: 2px; 
 }
+
+.prob-matrix-input {
+  width: 20px;
+  border: 0px;
+}

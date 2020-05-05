@@ -3,9 +3,10 @@ function createEvent(type) {
     return {
       type: "note",
       active: true,
-      note: "",
-      vel: "",
-      dur: "",
+      note: "C4",
+      vel: "100",
+      dur: "8n",
+      id: "",
     }
   } else if (type === "rest") {
     return {
@@ -14,6 +15,7 @@ function createEvent(type) {
       note: "",
       vel: "",
       dur: "",
+      id: "",
     }
   }
 }

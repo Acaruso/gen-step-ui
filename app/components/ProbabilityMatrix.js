@@ -13,14 +13,6 @@ function ProbabilityMatrix({probMatrix}) {
   )
 }
 
-function ProbabMatrixSquare({data}) {
-  return (
-    <span className="prob-matrix-square">
-      {data}
-    </span>
-  )
-}
-
 function renderMatrixRows(probMatrix) {
   const numRows = probMatrix.ids.length + 1;
   let rows = [];
@@ -31,15 +23,19 @@ function renderMatrixRows(probMatrix) {
 }
 
 function renderMatrixRow(probMatrix, idx) {
-  const cols = idx === 0 ? getMatrixHeaderRow(probMatrix) : getMatrixRow(probMatrix, idx);
+  const rowData = idx === 0 ? getMatrixHeaderRow(probMatrix) : getMatrixRow(probMatrix, idx);
 
-  const squares = cols.map((elt, i) => {
-    return <ProbabMatrixSquare data={elt} key={i} />;
+  const row = rowData.map((elt, i) => {
+    if (elt.isHeader) {
+      return <ProbMatrixHeaderSquare data={elt.data} key={i} />;
+    } else {
+      return <ProbMatrixSquare data={elt.data} key={i} />;
+    }
   });
 
   return (
     <div className="prob-matrix-row">
-      {squares}
+      {row}
     </div>
   );
 }
@@ -49,9 +45,9 @@ function getMatrixHeaderRow(probMatrix) {
   let cols = [];
   for (let i = 0; i < numCols; i++) {
     if (i === 0) {
-      cols.push("");
+      cols.push({ data: "", isHeader: true });
     } else {
-      cols.push(probMatrix.ids[i-1]);
+      cols.push({ data: probMatrix.ids[i-1], isHeader: true });
     }
   }
   return cols;
@@ -63,12 +59,32 @@ function getMatrixRow(probMatrix, idx) {
   const data = probMatrix.ids[idx-1];
   for (let i = 0; i < numCols; i++) {
     if (i === 0) {
-      cols.push(data);
+      cols.push({ data: data, isHeader: true });
     } else {
-      cols.push("");
+      cols.push({ data: "", isHeader: false });
     }
   }
   return cols;
+}
+
+function ProbMatrixSquare({data}) {
+  return (
+    <span className="prob-matrix-square">
+      <input
+        type="text"
+        className="prob-matrix-input"
+        value={data}
+      />
+    </span>
+  );
+}
+
+function ProbMatrixHeaderSquare({data}) {
+  return (
+    <span className="prob-matrix-square">
+      {data}
+    </span>
+  );
 }
 
 

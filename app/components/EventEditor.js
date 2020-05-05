@@ -107,7 +107,7 @@ function EventEditorForm({
           />
         </div>
         <div className="event-editor-row">
-          <label htmlFor="note">vel</label>
+          <label htmlFor="vel">vel</label>
           <input
             type="text"
             id="vel"
@@ -117,7 +117,7 @@ function EventEditorForm({
           />
         </div>
         <div className="event-editor-row">
-          <label htmlFor="note">dur</label>
+          <label htmlFor="dur">dur</label>
           <input
             type="text"
             id="dur"

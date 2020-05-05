@@ -25,7 +25,7 @@ function tick(time, args) {
     const event = track.events[transport];
 
     if (event && event.type !== 'rest') {
-      args.triggerEvent({id: id, event: event, time: time});
+      args.triggerEvent({ id: id, event: event, time: time });
     }
   }
 
