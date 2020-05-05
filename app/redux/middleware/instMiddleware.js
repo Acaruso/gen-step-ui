@@ -31,7 +31,7 @@ const instMiddleware = (store) => {
         // if event.note is empty string, make it C4
         const note = event.note.length === 0 ? 'C4' : event.note;
 
-        insts[id].triggerAttackRelease(note, '8n', time);
+        insts[id].triggerAttackRelease(note, '16n', time);
         return next(action);
 
       case 'tracks/loadSample':

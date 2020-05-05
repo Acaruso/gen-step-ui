@@ -1,18 +1,24 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
+import { createEvent } from "../../util/utils";
 
 let nextTrackId = 0;
+let nextEventId = "a";
 
 const trackSlice = createSlice({
-  name: 'tracks',
+  name: "tracks",
   initialState: {
     items: {},
     ids: [],
     numSteps: 16,
     curSelectedStep: {
       trackId: -1,
-      step: -1
+      step: -1,
     },
     transport: -1,
+    probMatrix: {
+      rows: {}, // a: { id: 'a', event: { trackId, eventIdx }, probs: { } }
+      ids: [],  // ['a', 'b', ...]
+    },
   },
   reducers: {
     addTrack: {
@@ -22,19 +28,16 @@ const trackSlice = createSlice({
         state.ids.push(newTrack.id);
       },
       prepare(data) {
-        let res = { payload: { ...data, id: nextTrackId++ } }
-        return res
-      }
+        return { payload: { ...data, id: nextTrackId++ } };
+      },
     },
     updateEvent(state, action) {
       const payload = action.payload;
       const track = state.items[payload.id];
+      const eventIdx = payload.eventIdx;
+      const event = payload.event;
       if (track) {
-        track.events[payload.event].type = payload.type;
-        track.events[payload.event].active = payload.active;
-        track.events[payload.event].note = payload.note;
-        track.events[payload.event].vel = payload.vel;
-        track.events[payload.event].dur = payload.dur;
+        track.events[eventIdx] = event;
       }
     },
     selectStep(state, action) {
@@ -66,30 +69,53 @@ const trackSlice = createSlice({
     incrementTransport(state, action) {
       state.transport = (state.transport + 1) % 16;
     },
+    resetTransport(state, action) {
+      state.transport = -1;
+    },
     triggerEvent(state, action) {
       // do nothing, action is handled in middleware
     },
     loadSample(state, action) {
       const { trackId, filePath } = action.payload;
       const track = state.items[trackId];
-      const splits = filePath.split('\\');
-      const sampleName = splits[splits.length - 1]
-      track.sampleName = sampleName ? sampleName : 'No sample loaded'
-    }
-  }
-})
+      const splits = filePath.split("\\");
+      const sampleName = splits[splits.length - 1];
+      track.sampleName = sampleName ? sampleName : "No sample loaded";
+    },
+    addToProbMatrix: {
+      reducer(state, action) {
+        const { eventId, trackId, eventIdx } = action.payload;
+        const event = { trackId: trackId, eventIdx: eventIdx };
+        state.probMatrix.rows[eventId] = { id: eventId, event: event };
+        state.probMatrix.ids.push(eventId);
+
+        state.items[trackId].events[eventIdx].id = eventId;
+      },
+      prepare(data) {
+        const id = nextEventId;
+        nextEventId = getNextChar(nextEventId);
+        return { payload: { ...data, eventId: id } };
+      },
+    },
+  },
+});
 
 function createTrack(payload, numSteps) {
   let track = {
     id: payload.id,
     name: payload.name,
     events: [],
-    sampleName: '',
+    sampleName: "",
   };
   for (let i = 0; i < numSteps; i++) {
-    track.events.push({ type: 'rest', active: false });
+    track.events.push(createEvent("rest"));
+    // track.events.push({ type: "rest", active: false });
   }
   return track;
+}
+
+function getNextChar(c) {
+  return String.fromCharCode(c.charCodeAt(0) + 1);
 }
 
 export const {
@@ -99,8 +125,10 @@ export const {
   deleteTrackById,
   deleteTrackByName,
   incrementTransport,
+  resetTransport,
   triggerEvent,
   loadSample,
-} = trackSlice.actions
+  addToProbMatrix,
+} = trackSlice.actions;
 
-export default trackSlice.reducer
+export default trackSlice.reducer;

@@ -65,6 +65,11 @@ input {
   margin-right: 5px;
 }
 
+.event-editor {
+  max-height: 170px;
+  min-height: 170px;
+}
+
 .event-editor-input {
   width: 60px;
   margin-left: 5px;
@@ -78,4 +83,25 @@ input {
 
 .song-input {
   width: 70px;
+}
+
+.prob-matrix-row {
+  display: flex;
+}
+
+.prob-matrix-square {
+  height: 20px;
+  width: 20px;
+  background-color: white;
+  border: 1px solid black;
+  margin-bottom: 2px;
+}
+
+.prob-matrix-square + .prob-matrix-square { 
+  margin-left: 2px; 
+}
+
+.prob-matrix-input {
+  width: 20px;
+  border: 0px;
 }

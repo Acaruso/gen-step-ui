@@ -2,7 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import Track from './Track';
 import EventEditor from './EventEditor';
 import Transport from './Transport';
-import { addTrack, deleteTrackByName, incrementTransport, triggerEvent } from './redux/slices/trackSlice';
+import ProbabilityMatrix from './ProbabilityMatrix';
+import { 
+  addTrack, 
+  deleteTrackByName, 
+  incrementTransport, 
+  resetTransport, 
+  triggerEvent 
+} from '../redux/slices/trackSlice';
 import { connect } from 'react-redux';
 import * as Tone from 'tone';
 
@@ -24,7 +31,7 @@ function tick(time, args) {
     const event = track.events[transport];
 
     if (event && event.type !== 'rest') {
-      args.triggerEvent({id: id, event: event, time: time});
+      args.triggerEvent({ id: id, event: event, time: time });
     }
   }
 
@@ -32,7 +39,14 @@ function tick(time, args) {
 }
 
 
-function Song({tracks, addTrack, deleteTrackByName, incrementTransport, triggerEvent}) {
+function Song({
+  tracks,
+  addTrack,
+  deleteTrackByName,
+  incrementTransport,
+  resetTransport,
+  triggerEvent,
+}) {
   const [trackNameValue, setTrackNameValue] = useState('');
   const [deleteTrackNameValue, setDeleteTrackNameValue] = useState('');
   const [loop, setLoop] = useState({});
@@ -105,6 +119,11 @@ function Song({tracks, addTrack, deleteTrackByName, incrementTransport, triggerE
     loop.stop();
   }
 
+  function onDoubleClickStop() {
+    loop.stop();
+    resetTransport();
+  }
+
   return (
     <>
       <div className="grid">
@@ -123,12 +142,20 @@ function Song({tracks, addTrack, deleteTrackByName, incrementTransport, triggerE
           </div>
           <div>
             <button onClick={onClickPlay}>Play</button>
-            <button onClick={onClickStop}>Stop</button>
+            <button
+              onClick={onClickStop}
+              onDoubleClick={onDoubleClickStop}
+            >
+              Stop
+            </button>
           </div>
           <Transport transport={tracks.transport}/>
           {trackElts}
         </div>
-        <EventEditor />
+        <div>
+          <EventEditor />
+          <ProbabilityMatrix />
+        </div>
       </div>
     </>
   );
@@ -140,7 +167,13 @@ function mapStateToProps(state) {
   }
 }
 
-const mapDispatchToProps = { addTrack, deleteTrackByName, incrementTransport, triggerEvent };
+const mapDispatchToProps = {
+  addTrack,
+  deleteTrackByName,
+  incrementTransport,
+  resetTransport,
+  triggerEvent
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Song);
 
