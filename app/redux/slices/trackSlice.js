@@ -69,6 +69,9 @@ const trackSlice = createSlice({
     incrementTransport(state, action) {
       state.transport = (state.transport + 1) % 16;
     },
+    resetTransport(state, action) {
+      state.transport = -1;
+    },
     triggerEvent(state, action) {
       // do nothing, action is handled in middleware
     },
@@ -122,6 +125,7 @@ export const {
   deleteTrackById,
   deleteTrackByName,
   incrementTransport,
+  resetTransport,
   triggerEvent,
   loadSample,
   addToProbMatrix,

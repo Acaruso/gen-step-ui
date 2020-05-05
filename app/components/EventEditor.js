@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { updateEvent, addToProbMatrix } from "../redux/slices/trackSlice";
 import { createEvent } from "../util/utils";
 
-function EventEditor({ curEvent, curSelectedStep, updateEvent, probMatrix, addToProbMatrix }) {
+function EventEditor({ curEvent, curSelectedStep, updateEvent, addToProbMatrix }) {
   function onClickCreateEvent(e) {
     const event = createEvent("note");
     updateEvent({
@@ -160,7 +160,6 @@ function mapStateToProps(state) {
   return {
     curEvent: selectCurEvent(state),
     curSelectedStep: state.tracks.curSelectedStep,
-    probMatrix: state.tracks.probMatrix,
   };
 }
 
