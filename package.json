@@ -27,7 +27,7 @@
     "babel-loader": "^8.1.0",
     "babel-preset-env": "^1.7.0",
     "electron": "^8.2.0",
-    "i": "^0.3.6",
+    "i": "^0.3.7",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
